@@ -6,13 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
-@OpenAPIDefinition(
-	info=@Info(
-		title="Delivery API",
-		version="1.0.0",
-		description="Documentação da API de gerenciamento"
-	)
-)
+@OpenAPIDefinition(info = @Info(title = "Delivery API", version = "1.0.0", description = "Documentação da API de gerenciamento"))
 
 @SpringBootApplication
 public class DeliveryApiApplication {
