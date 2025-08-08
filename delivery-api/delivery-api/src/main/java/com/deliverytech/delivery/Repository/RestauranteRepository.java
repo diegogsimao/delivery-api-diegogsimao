@@ -1,8 +1,9 @@
 package com.deliverytech.delivery.repository;
 
-import com.deliverytech.delivery.model.Restaurante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import com.deliverytech.delivery.entity.Restaurante;
 
 import java.util.List;
 
