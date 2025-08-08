@@ -12,7 +12,7 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Cliente create(Cliente cliente) {
+    public Cliente Create(Cliente cliente) {
 
         if (clienteRepository.existsByEmail(cliente.getEmail())) {
             throw new IllegalArgumentException("Cliente com email já cadastrado: " + cliente.getEmail());
@@ -21,7 +21,7 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public Cliente findById(Long id) {
+    public Cliente ObterPorId(Long id) {
 
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do cliente inválido: " + id);
@@ -31,7 +31,7 @@ public class ClienteService {
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
     }
 
-    public Cliente update(Cliente cliente) {
+    public Cliente Update(Cliente cliente) {
 
         if (cliente.getId() == null || cliente.getId() <= 0) {
             throw new IllegalArgumentException("ID do cliente inválido: " + cliente.getId());
@@ -44,7 +44,7 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public void InactivateClient(Long id) {
+    public void InativarCliente(Long id) {
 
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do cliente inválido: " + id);

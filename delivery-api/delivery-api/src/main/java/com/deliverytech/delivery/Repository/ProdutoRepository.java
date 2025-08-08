@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.deliverytech.delivery.entity.Produto;
+import com.deliverytech.delivery.entity.Restaurante;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
@@ -17,5 +18,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query("SELECT p FROM Produto p WHERE p.disponivel = true")
     List<Produto> findByDisponibilidadeTrue();
+
+    List<Restaurante> ObterProdutosPorRestaurante(long produtoId);
 
 }
