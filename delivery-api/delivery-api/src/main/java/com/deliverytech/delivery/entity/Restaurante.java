@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Data
@@ -20,9 +19,6 @@ public class Restaurante {
     private BigDecimal taxaEntrega;
     private boolean ativo = true;
     private BigDecimal avaliacao;
-
-    @OneToMany(mappedBy = "restaurante")
-    private List<Pedido> pedidos;
 
     public String getCategoria() {
         return categoria;
@@ -87,13 +83,5 @@ public class Restaurante {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
     }
 }

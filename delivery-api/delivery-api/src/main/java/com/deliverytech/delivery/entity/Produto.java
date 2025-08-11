@@ -17,11 +17,6 @@ public class Produto {
     private BigDecimal preco;
     private String categoria;
     private boolean disponivel = true;
-    private Long restauranteId;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurante_id")
-    private Restaurante restaurante;
 
     // Getters and Setters
     public Long getId() {
@@ -70,13 +65,5 @@ public class Produto {
 
     public void setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
-    }
-
-    public Long getRestauranteId() {
-        return restauranteId;
-    }
-
-    public void setRestauranteId(Long restauranteId) {
-        this.restauranteId = restauranteId;
     }
 }

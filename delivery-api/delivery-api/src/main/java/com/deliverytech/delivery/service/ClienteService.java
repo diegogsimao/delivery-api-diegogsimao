@@ -1,7 +1,10 @@
 package com.deliverytech.delivery.service;
 
 import com.deliverytech.delivery.entity.Cliente;
-import com.deliverytech.delivery.repository.ClienteRepository;
+import com.deliverytech.delivery.repository.IClienteRepository;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,41 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ClienteService {
     @Autowired
-    private ClienteRepository clienteRepository;
+    private IClienteRepository clienteRepository;
 
-    public Cliente Create(Cliente cliente) {
+    // Listar todos os clientes
+    public List<Cliente> getAll() {
+        return clienteRepository.findAll();
+    }
 
-        if (clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("Cliente com email já cadastrado: " + cliente.getEmail());
-        }
-
+    // Criação de um novo cliente
+    public Cliente create(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
-    public Cliente ObterPorId(Long id) {
-
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("ID do cliente inválido: " + id);
-        }
-
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
-    }
-
-    public Cliente Update(Cliente cliente) {
-
-        if (cliente.getId() == null || cliente.getId() <= 0) {
-            throw new IllegalArgumentException("ID do cliente inválido: " + cliente.getId());
-        }
-
-        if (!clienteRepository.existsById(cliente.getId())) {
-            throw new IllegalArgumentException("Cliente não encontrado: " + cliente.getId());
-        }
-
-        return clienteRepository.save(cliente);
-    }
-
-    public void InativarCliente(Long id) {
+    // deletar um cliente
+    public Cliente delete(Long id) {
 
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do cliente inválido: " + id);
@@ -53,7 +35,8 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
 
-        cliente.setAtivo(false);
-        clienteRepository.save(cliente);
+        clienteRepository.delete(cliente);
+        return cliente;
     }
+
 }

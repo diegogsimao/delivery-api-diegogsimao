@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Data
@@ -19,9 +18,6 @@ public class Cliente {
     private String endereco;
     private LocalDateTime dataCadastro = LocalDateTime.now();
     private boolean ativo;
-
-    @OneToMany(mappedBy = "cliente")
-    private List<Pedido> pedidos;
 
     public LocalDateTime getDataCadastro() {
         return dataCadastro;
@@ -77,13 +73,5 @@ public class Cliente {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
     }
 }

@@ -10,12 +10,11 @@ import java.util.List;
 @Entity
 @Data
 public class Pedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long clienteId;
-    private Long restauranteId;
     private List<Long> produtosId;
     private BigDecimal valorTotal;
     private String status;
@@ -28,22 +27,6 @@ public class Pedido {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
-    }
-
-    public Long getRestauranteId() {
-        return restauranteId;
-    }
-
-    public void setRestauranteId(Long restauranteId) {
-        this.restauranteId = restauranteId;
     }
 
     public List<Long> getProdutosId() {
@@ -78,5 +61,4 @@ public class Pedido {
         this.dataPedido = dataPedido;
     }
 
-    
 }
