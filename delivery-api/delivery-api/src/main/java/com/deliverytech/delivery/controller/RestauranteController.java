@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.deliverytech.delivery.entity.Restaurante;
-import com.deliverytech.delivery.service.RestauranteService;
+
+import com.deliverytech.delivery.DTOs.RestaurantDTO;
+import com.deliverytech.delivery.entity.Restaurant;
+import com.deliverytech.delivery.service.RestaurantService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -13,15 +15,15 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 public class RestauranteController {
 
     @Autowired
-    private RestauranteService restauranteService;
+    private RestaurantService restauranteService;
 
     @PostMapping("/restaurantes")
-    public Restaurante createRestaurante(@RequestBody Restaurante restaurante) {
+    public Restaurant createRestaurante(@RequestBody Restaurant restaurante) {
         return restauranteService.create(restaurante);
     }
 
     @PutMapping("/restaurantes/{id}")
-    public Restaurante updateRestaurante(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+    public Restaurant updateRestaurante(@PathVariable Long id, @RequestBody Restaurant restaurante) {
         restaurante.setId(id);
         return restauranteService.update(restaurante);
     }
@@ -32,7 +34,7 @@ public class RestauranteController {
     }
 
     @GetMapping("/restaurantes")
-    public List<Restaurante> getAllRestaurantes() {
+    public List<RestaurantDTO> getAllRestaurantes() {
         return restauranteService.findAll();
     }
 }

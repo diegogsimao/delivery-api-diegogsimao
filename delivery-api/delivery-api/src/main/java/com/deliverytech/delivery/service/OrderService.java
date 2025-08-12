@@ -3,33 +3,33 @@ package com.deliverytech.delivery.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.deliverytech.delivery.entity.Pedido;
+import com.deliverytech.delivery.entity.Order;
 import com.deliverytech.delivery.repository.IPedidoRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class PedidoService {
+public class OrderService {
 
     @Autowired
     private IPedidoRepository pedidoRepository;
 
-    public Pedido create(Pedido pedido) {
+    public Order create(Order pedido) {
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido não pode ser nulo");
         }
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido update(Pedido pedido) {
+    public Order update(Order pedido) {
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido não pode ser nulo");
         }
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido delete(Long id) {
+    public Order delete(Long id) {
         if (!pedidoRepository.existsById(id)) {
             throw new IllegalArgumentException("Pedido não encontrado");
         }

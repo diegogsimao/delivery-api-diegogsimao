@@ -5,23 +5,25 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.deliverytech.delivery.entity.Produto;
-import com.deliverytech.delivery.service.ProdutoService;
+import com.deliverytech.delivery.entity.Product;
+import com.deliverytech.delivery.service.ProductService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
+@RestController
 public class ProdutoController {
     @Autowired
-    private ProdutoService produtoService;
+    private ProductService produtoService;
 
     @PostMapping("/produto")
-    public Produto createProduto(@RequestBody Produto produto) {
+    public Product createProduto(@RequestBody Product produto) {
         return produtoService.create(produto);
     }
 
     @PutMapping("/produto/{id}")
-    public Produto updateProduto(@PathVariable Long id, @RequestBody Produto produtos) {
+    public Product updateProduto(@PathVariable Long id, @RequestBody Product produtos) {
         produtos.setId(id);
         return produtoService.update(produtos);
     }

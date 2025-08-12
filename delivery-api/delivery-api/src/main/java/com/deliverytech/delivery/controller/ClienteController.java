@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deliverytech.delivery.entity.Cliente;
-import com.deliverytech.delivery.service.ClienteService;
+import com.deliverytech.delivery.entity.Customer;
+import com.deliverytech.delivery.service.CustomerService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -18,15 +18,15 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 public class ClienteController {
 
     @Autowired
-    private ClienteService clienteService;
+    private CustomerService clienteService;
 
     @PostMapping("/clientes")
-    public Cliente createCliente(@RequestBody Cliente cliente) {
+    public Customer createCliente(@RequestBody Customer cliente) {
         return clienteService.create(cliente);
     }
 
     @GetMapping("/clientes")
-    public List<Cliente> getAllClientes() {
+    public List<Customer> getAllClientes() {
         return clienteService.getAll();
     }
 

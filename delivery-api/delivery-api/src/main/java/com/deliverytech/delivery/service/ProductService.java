@@ -3,22 +3,22 @@ package com.deliverytech.delivery.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.deliverytech.delivery.entity.Produto;
+import com.deliverytech.delivery.entity.Product;
 import com.deliverytech.delivery.repository.IProdutoRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class ProdutoService {
+public class ProductService {
     @Autowired
     private IProdutoRepository produtoRepository;
 
-    public Produto create(Produto produto) {
+    public Product create(Product produto) {
         return produtoRepository.save(produto);
     }
 
-    public Produto update(Produto produto) {
+    public Product update(Product produto) {
         return produtoRepository.save(produto);
     }
 
