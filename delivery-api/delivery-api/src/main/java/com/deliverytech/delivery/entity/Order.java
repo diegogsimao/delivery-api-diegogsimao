@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deliverytech.delivery.entity.enums.OrderStatus;
+
 @NoArgsConstructor
 @Entity
 @Data
@@ -20,7 +22,7 @@ public class Order {
     private Long id;
 
     private BigDecimal valorTotal;
-    private String status;
+    private OrderStatus status;
     private LocalDateTime dataPedido;
 
     @ManyToOne
