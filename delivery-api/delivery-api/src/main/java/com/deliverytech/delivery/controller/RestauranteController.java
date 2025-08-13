@@ -50,9 +50,4 @@ public class RestauranteController {
         restaurantService.delete(id);
     }
 
-    @GetMapping("/restaurantes")
-    public List<RestaurantDTO> getAllRestaurantes() {
-        List<Restaurant> restaurantes = restaurantService.findAll();
-        return restaurantMapper.toTargetList(restaurantes);
-    }
 }

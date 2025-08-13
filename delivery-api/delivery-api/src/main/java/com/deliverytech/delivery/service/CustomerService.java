@@ -21,6 +21,7 @@ public class CustomerService {
         this.clienteRepository = clienteRepository;
     }
 
+    // Busca um cliente pelo ID
     public Customer findById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do cliente inválido: " + id);
@@ -30,6 +31,7 @@ public class CustomerService {
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
     }
 
+    // Busca um cliente pelo email
     public Customer findByEmail(String email) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email do cliente não pode ser nulo ou vazio");
