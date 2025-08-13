@@ -28,8 +28,4 @@ public class ProdutoController {
         return produtoService.update(produtos);
     }
 
-    @DeleteMapping("/produto/{id}")
-    public void deleteProduto(@PathVariable Long id) {
-        produtoService.delete(id);
-    }
 }

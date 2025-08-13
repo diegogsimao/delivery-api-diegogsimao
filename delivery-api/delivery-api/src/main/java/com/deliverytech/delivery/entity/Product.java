@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @Table(name = "Products")
 public class Product {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +27,7 @@ public class Product {
     // Cria o relacionamento com OrderItem 1 => N
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<Restaurant> restaurants = new ArrayList<>();
 }
