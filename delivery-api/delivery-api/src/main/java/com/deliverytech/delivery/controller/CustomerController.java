@@ -37,11 +37,6 @@ public class CustomerController {
         return clienteService.create(entity);
     }
 
-    @GetMapping("/clientes")
-    public List<CustomerDTO> getAllClientes() {
-        return clienteService.getAll();
-    }
-
     @DeleteMapping("/clientes/{id}")
     public void deleteCliente(@PathVariable Long id) {
         clienteService.delete(id);

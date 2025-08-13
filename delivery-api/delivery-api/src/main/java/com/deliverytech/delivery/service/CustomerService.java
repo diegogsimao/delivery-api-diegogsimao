@@ -1,8 +1,6 @@
 package com.deliverytech.delivery.service;
 
-import com.deliverytech.delivery.DTOs.CustomerDTO;
 import com.deliverytech.delivery.entity.Customer;
-import com.deliverytech.delivery.mapper.CustomerMapper;
 import com.deliverytech.delivery.repository.ICustomerRepository;
 
 import java.util.List;
@@ -16,26 +14,36 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerService {
 
     private ICustomerRepository clienteRepository;
-    private CustomerMapper customerMapper;
 
     @Autowired
     public CustomerService(
-            ICustomerRepository clienteRepository,
-            CustomerMapper customerMapper) {
+            ICustomerRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
-        this.customerMapper = customerMapper;
     }
 
-    // Listar todos os clientes
-    public List<CustomerDTO> getAll() {
-        return clienteRepository.findAll()
-                .stream()
-                .map(customerMapper::toTarget)
-                .toList();
+    public Customer findById(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do cliente inválido: " + id);
+        }
+
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
+    }
+
+    public Customer findByEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email do cliente não pode ser nulo ou vazio");
+        }
+        return clienteRepository.findByEmail(email);
     }
 
     // Criação de um novo cliente
     public Customer create(Customer cliente) {
+
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente não pode ser nulo");
+        }
+
         return clienteRepository.save(cliente);
     }
 
@@ -53,4 +61,34 @@ public class CustomerService {
         return cliente;
     }
 
+    // Atualizar um cliente
+    public Customer update(Customer customer) {
+        if (customer == null || customer.getId() == null) {
+            throw new IllegalArgumentException("Cliente inválido");
+        }
+
+        if (!clienteRepository.existsById(customer.getId())) {
+            throw new IllegalArgumentException("Cliente não encontrado: " + customer.getId());
+        }
+
+        return clienteRepository.save(customer);
+    }
+
+    // Ativar ou desativar um cliente
+    public Customer activeOrDesactiveCustomer(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do cliente inválido: " + id);
+        }
+
+        Customer cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
+
+        cliente.setActive(!cliente.isActive());
+        return clienteRepository.save(cliente);
+    }
+
+    // Lista todos os clientes ativos
+    public List<Customer> getListCustomerActive() {
+        return clienteRepository.findByActive(true);
+    }
 }
