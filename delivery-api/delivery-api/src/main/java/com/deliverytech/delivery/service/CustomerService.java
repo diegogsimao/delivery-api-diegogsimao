@@ -1,7 +1,9 @@
 package com.deliverytech.delivery.service;
 
+import com.deliverytech.delivery.DTOs.CustomerDTO;
 import com.deliverytech.delivery.entity.Customer;
-import com.deliverytech.delivery.repository.IClienteRepository;
+import com.deliverytech.delivery.mapper.CustomerMapper;
+import com.deliverytech.delivery.repository.ICustomerRepository;
 
 import java.util.List;
 
@@ -12,12 +14,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class CustomerService {
+
+    private ICustomerRepository clienteRepository;
+    private CustomerMapper customerMapper;
+
     @Autowired
-    private IClienteRepository clienteRepository;
+    public CustomerService(
+            ICustomerRepository clienteRepository,
+            CustomerMapper customerMapper) {
+        this.clienteRepository = clienteRepository;
+        this.customerMapper = customerMapper;
+    }
 
     // Listar todos os clientes
-    public List<Customer> getAll() {
-        return clienteRepository.findAll();
+    public List<CustomerDTO> getAll() {
+        return clienteRepository.findAll()
+                .stream()
+                .map(customerMapper::toTarget)
+                .toList();
     }
 
     // Criação de um novo cliente

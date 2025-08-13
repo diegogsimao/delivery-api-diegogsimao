@@ -1,12 +1,9 @@
 package com.deliverytech.delivery.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.deliverytech.delivery.DTOs.RestaurantDTO;
 import com.deliverytech.delivery.entity.Restaurant;
 import com.deliverytech.delivery.repository.IRestaurantRepository;
 
@@ -16,10 +13,9 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class RestaurantService {
 
-    @Autowired
     private IRestaurantRepository restauranteRepository;
 
-    // Injeta a dependência
+    @Autowired
     public RestaurantService(IRestaurantRepository _RestauranteRepository) {
         this.restauranteRepository = _RestauranteRepository;
     }
@@ -39,17 +35,8 @@ public class RestaurantService {
         restauranteRepository.deleteById(id);
     }
 
-    public List<RestaurantDTO> findAll() {
-        return restauranteRepository.findAll().stream()
-                .map(this::ConvertEntityToDTO)
-                .collect(Collectors.toList());
-    }
-
-    private RestaurantDTO ConvertEntityToDTO(Restaurant restaurant) {
-        RestaurantDTO dto = new RestaurantDTO();
-        dto.setName(restaurant.getName());
-        dto.setDescription(restaurant.getDescription());
-        return dto;
+    public List<Restaurant> findAll() {
+        return restauranteRepository.findAll();
     }
 
 }

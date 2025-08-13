@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Data
 @Table(name = "Restaurants")
 public class Restaurant {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,12 +25,4 @@ public class Restaurant {
     private BigDecimal deliveryFee;
     private boolean active = true;
     private BigDecimal rating;
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }

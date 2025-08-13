@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deliverytech.delivery.entity.Order;
-import com.deliverytech.delivery.repository.IPedidoRepository;
+import com.deliverytech.delivery.repository.IOrderRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 public class OrderService {
 
     @Autowired
-    private IPedidoRepository pedidoRepository;
+    private IOrderRepository pedidoRepository;
 
     public Order create(Order pedido) {
         if (pedido == null) {

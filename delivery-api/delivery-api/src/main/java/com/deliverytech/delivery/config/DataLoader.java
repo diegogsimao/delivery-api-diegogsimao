@@ -11,13 +11,13 @@ public class DataLoader implements CommandLineRunner {
     private IRestaurantRepository restauranteRepository;
 
     @Autowired
-    private IClienteRepository clientRespository;
+    private ICustomerRepository clientRespository;
 
     @Autowired
     private IProdutoRepository produtoRepository;
 
     @Autowired
-    private IPedidoRepository pedidoRepository;
+    private IOrderRepository pedidoRepository;
 
     @Override
     public void run(String... args) throws Exception {

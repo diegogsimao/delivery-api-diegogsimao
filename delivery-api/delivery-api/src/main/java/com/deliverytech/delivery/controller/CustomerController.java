@@ -9,24 +9,36 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deliverytech.delivery.DTOs.CustomerDTO;
 import com.deliverytech.delivery.entity.Customer;
+import com.deliverytech.delivery.mapper.CustomerMapper;
 import com.deliverytech.delivery.service.CustomerService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
-public class ClienteController {
+public class CustomerController {
+
+    private CustomerService clienteService;
+    private CustomerMapper customerMapper;
 
     @Autowired
-    private CustomerService clienteService;
+    public CustomerController(
+            CustomerService clienteService,
+            CustomerMapper customerMapper) {
+
+        this.clienteService = clienteService;
+        this.customerMapper = customerMapper;
+    }
 
     @PostMapping("/clientes")
-    public Customer createCliente(@RequestBody Customer cliente) {
-        return clienteService.create(cliente);
+    public Customer createCliente(@RequestBody CustomerDTO clienteDTO) {
+        Customer entity = customerMapper.toSource(clienteDTO);
+        return clienteService.create(entity);
     }
 
     @GetMapping("/clientes")
-    public List<Customer> getAllClientes() {
+    public List<CustomerDTO> getAllClientes() {
         return clienteService.getAll();
     }
 

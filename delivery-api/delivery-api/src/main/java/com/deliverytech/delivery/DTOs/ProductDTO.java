@@ -3,14 +3,11 @@ package com.deliverytech.delivery.DTOs;
 import java.math.BigDecimal;
 
 @SuppressWarnings("unused")
-public class RestaurantDTO {
+public class ProductDTO {
     private Long id;
     private String description;
     private String name;
+    private BigDecimal price;
     private String category;
-    private String address;
-    private String phone;
-    private BigDecimal deliveryFee;
-    private boolean active = true;
-    private BigDecimal rating;
+    private boolean available = true;
 }
