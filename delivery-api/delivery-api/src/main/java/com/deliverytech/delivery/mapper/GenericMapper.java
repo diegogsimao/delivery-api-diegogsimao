@@ -2,9 +2,7 @@ package com.deliverytech.delivery.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.swing.text.html.parser.Entity;
-
 import org.mapstruct.factory.Mappers;
 
 @SuppressWarnings("hiding")

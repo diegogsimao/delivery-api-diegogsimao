@@ -26,11 +26,11 @@ public class ProductService {
     }
 
     // Busca todos os produtos ativos por ID do restaurante
-    public List<Product> findAllByRestaurantActiveById(long restaurantId) {
+    public List<Product> findByAvailableTrueAndRestaurantsId(long restaurantId) {
         if (restaurantId <= 0) {
             throw new IllegalArgumentException("ID do restaurante inválido");
         }
-        return produtoRepository.findAllByRestaurantActiveById(restaurantId);
+        return produtoRepository.findByAvailableTrueAndRestaurantsId(restaurantId);
     }
 
     // Busca um produto por ID
@@ -60,10 +60,10 @@ public class ProductService {
     }
 
     // Busca todos os produtos por ID da categoria
-    public List<Product> findAllByCategoryId(Long categoryId) {
-        if (categoryId == null || categoryId <= 0) {
-            throw new IllegalArgumentException("ID da categoria inválido");
+    public List<Product> findAllByCategoryName(String categoryName) {
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome da categoria inválido");
         }
-        return produtoRepository.findAllByCategoryId(categoryId);
+        return produtoRepository.findAllBycategoryName(categoryName);
     }
 }

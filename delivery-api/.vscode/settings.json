@@ -1,5 +1,3 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "java.format.settings.url": "eclipse-formatter.xml",
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

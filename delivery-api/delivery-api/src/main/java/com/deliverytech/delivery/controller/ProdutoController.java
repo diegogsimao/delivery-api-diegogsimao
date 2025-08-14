@@ -1,7 +1,6 @@
 package com.deliverytech.delivery.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,8 +13,13 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 public class ProdutoController {
-    @Autowired
+
     private ProductService produtoService;
+
+    @Autowired
+    public ProdutoController(ProductService produtoService) {
+        this.produtoService = produtoService;
+    }
 
     @PostMapping("/produto")
     public Product createProduto(@RequestBody Product produto) {

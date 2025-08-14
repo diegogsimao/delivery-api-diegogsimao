@@ -2,13 +2,30 @@ package com.deliverytech.delivery.DTOs;
 
 import java.time.LocalDateTime;
 
-@SuppressWarnings("unused")
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class CustomerDTO {
-    private Long id = 0L;
-    private String name = "";
-    private String email = "";
-    private String phone = "";
-    private String address = "";
+    private Long id;
+
+    @NotNull
+    @Size(max = 100)
+    private String name;
+
+    @Email
+    private String email;
+
+    @Size(max = 15)
+    private String phone;
+
+    @Size(max = 100)
+    private String address;
+
     private LocalDateTime registrationDate = LocalDateTime.now();
     private boolean active;
 }

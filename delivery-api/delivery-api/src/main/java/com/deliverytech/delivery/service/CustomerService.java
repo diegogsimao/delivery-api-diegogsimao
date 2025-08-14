@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+
 public class CustomerService {
 
     private ICustomerRepository clienteRepository;
@@ -40,6 +40,7 @@ public class CustomerService {
     }
 
     // Criação de um novo cliente
+    @Transactional
     public Customer create(Customer cliente) {
 
         if (cliente == null) {
@@ -50,6 +51,7 @@ public class CustomerService {
     }
 
     // deletar um cliente
+    @Transactional
     public Customer delete(Long id) {
 
         if (id == null || id <= 0) {
@@ -64,6 +66,7 @@ public class CustomerService {
     }
 
     // Atualizar um cliente
+    @Transactional
     public Customer update(Customer customer) {
         if (customer == null || customer.getId() == null) {
             throw new IllegalArgumentException("Cliente inválido");

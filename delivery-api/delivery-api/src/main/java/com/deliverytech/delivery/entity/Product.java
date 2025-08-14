@@ -21,7 +21,7 @@ public class Product {
     private String description;
     private String name;
     private BigDecimal price;
-    private String category;
+    private String categoryName;
     private boolean available = true;
 
     // Cria o relacionamento com OrderItem 1 => N
