@@ -17,15 +17,43 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class OrderService {
 
-    @Autowired
+    
     private IOrderRepository pedidoRepository;
 
+    @Autowired
+    public OrderService(IOrderRepository pedidoRepository) {
+        this.pedidoRepository = pedidoRepository;
+    }
+
+    @Transactional
     // Cria um pedido
     public Order create(Order pedido) {
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido não pode ser nulo");
         }
         return pedidoRepository.save(pedido);
+    }
+
+    @Transactional
+    // Atualiza um pedido
+    public Order update(Order pedido) {
+        if (pedido == null || pedido.getId() == null) {
+            throw new IllegalArgumentException("Pedido ou ID do pedido não pode ser nulo");
+        }
+        return pedidoRepository.save(pedido);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        Order pedido = findById(id);
+        if (pedido != null) {
+            pedidoRepository.delete(pedido);
+        } else {
+            throw new IllegalArgumentException("Pedido não encontrado com o ID: " + id);
+        }
     }
 
     // Busca um pedido por ID

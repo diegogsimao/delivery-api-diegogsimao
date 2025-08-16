@@ -1,4 +1,4 @@
-package com.deliverytech.delivery.DTOs;
+package com.deliverytech.delivery.DTOs.Requests;
 
 import java.time.LocalDateTime;
 

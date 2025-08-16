@@ -81,6 +81,7 @@ public class CustomerService {
 
     // Ativar ou desativar um cliente
     public Customer activeOrDesactiveCustomer(Long id) {
+        
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do cliente inválido: " + id);
         }
@@ -90,6 +91,10 @@ public class CustomerService {
 
         cliente.setActive(!cliente.isActive());
         return clienteRepository.save(cliente);
+    }
+
+    public List<Customer> findAll() {
+        return clienteRepository.findAll();
     }
 
     // Lista todos os clientes ativos

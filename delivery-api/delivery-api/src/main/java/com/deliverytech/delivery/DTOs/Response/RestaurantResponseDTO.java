@@ -1,9 +1,9 @@
-package com.deliverytech.delivery.DTOs;
+package com.deliverytech.delivery.DTOs.Response;
 
 import java.math.BigDecimal;
 
 @SuppressWarnings("unused")
-public class RestaurantDTO {
+public class RestaurantResponseDTO {
     private Long id;
     private String description;
     private String name;

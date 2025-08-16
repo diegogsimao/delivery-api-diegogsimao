@@ -16,4 +16,5 @@ public interface IRestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     boolean existsById(Long id);
 
+    List<Restaurant> findAllByCep(String cep);
 }

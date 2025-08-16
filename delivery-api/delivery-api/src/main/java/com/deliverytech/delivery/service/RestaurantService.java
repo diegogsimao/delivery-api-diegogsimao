@@ -21,7 +21,12 @@ public class RestaurantService {
         this.restaurantRepository = _restaurantRepository;
     }
 
+    public List<Restaurant> findAll() {
+        return restaurantRepository.findAll();
+    }
+
     // Criação de um novo restaurante
+    @Transactional
     public Restaurant create(Restaurant restaurant) {
         if (restaurant == null) {
             throw new IllegalArgumentException("restaurante não pode ser nulo");
@@ -41,14 +46,22 @@ public class RestaurantService {
     }
 
     public List<Restaurant> getAllByCategory(String category) {
+
         if (category == null || category.isEmpty()) {
             throw new IllegalArgumentException("Categoria não pode ser nula ou vazia");
         }
-
         return restaurantRepository.findAllByCategory(category);
     }
 
+    public List<Restaurant> getAllByCep(String cep) {
+        if (cep == null || cep.isEmpty()) {
+            throw new IllegalArgumentException("CEP não pode ser nulo ou vazio");
+        }
+        return restaurantRepository.findAllByCep(cep);
+    }
+
     // Atualização de um restaurante
+    @Transactional
     public Restaurant update(Restaurant restaurant) {
         if (restaurant == null) {
             throw new IllegalArgumentException("restaurant não pode ser nulo");
@@ -62,6 +75,7 @@ public class RestaurantService {
     }
 
     // Exclusão de um restaurant
+    @Transactional
     public void delete(Long id) {
         restaurantRepository.deleteById(id);
     }

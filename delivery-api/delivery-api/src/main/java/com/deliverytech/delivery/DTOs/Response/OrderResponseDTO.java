@@ -1,10 +1,10 @@
-package com.deliverytech.delivery.DTOs;
+package com.deliverytech.delivery.DTOs.Response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @SuppressWarnings("unused")
-public class OrderDTO {
+public class OrderResponseDTO {
     private Long id;
     private BigDecimal valorTotal;
     private String status;

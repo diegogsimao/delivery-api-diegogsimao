@@ -1,9 +1,13 @@
 package com.deliverytech.delivery.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.deliverytech.delivery.DTOs.RestaurantDTO;
+import com.deliverytech.delivery.DTOs.Requests.RestaurantDTO;
+import com.deliverytech.delivery.DTOs.Response.RestaurantResponseDTO;
 import com.deliverytech.delivery.entity.Restaurant;
 import com.deliverytech.delivery.mapper.RestaurantMapper;
 import com.deliverytech.delivery.service.RestaurantService;
@@ -22,16 +26,52 @@ public class RestauranteController {
         this.restaurantMapper = restaurantMapper;
     }
 
-    @PostMapping("/restaurantes")
-    public RestaurantDTO createRestaurante(
+    @PostMapping("api/restaurantes")
+    public ResponseEntity<RestaurantResponseDTO> createRestaurante(
             @RequestBody RestaurantDTO restauranteDTO) {
 
         Restaurant restaurant = restaurantMapper.toSource(restauranteDTO);
-        return restaurantMapper.toTarget(restaurantService.create(restaurant));
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurantService.create(restaurant)));
     }
 
-    @PutMapping("/restaurantes/{id}")
-    public RestaurantDTO updateRestaurante(
+    @GetMapping("api/restaurantes/{id}")
+    public ResponseEntity<RestaurantResponseDTO> getRestaurante(@PathVariable Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do restaurante inválido: " + id);
+        }
+
+        Restaurant restaurant = restaurantService.findById(id);
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurant));
+    }
+
+    @GetMapping("api/restaurantes")
+    public ResponseEntity<List<RestaurantResponseDTO>> getAll() {
+        List<Restaurant> restaurantes = restaurantService.findAll();
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+    }
+
+    @GetMapping("api/restaurantes/categoria/{categoria}")
+    public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantesByCategoria(@PathVariable String categoria) {
+        List<Restaurant> restaurantes = restaurantService.getAllByCategory(categoria);
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+    }
+
+    @GetMapping("api/restaurantes/{id}/taxa-entrega/{cep}")
+    public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantesByCategoria(
+            @PathVariable Long id,
+            @PathVariable String cep) {
+
+        Restaurant restaurant = restaurantService.findById(id);
+        if (restaurant == null) {
+            throw new IllegalArgumentException("Restaurante não encontrado: " + id);
+        }
+
+        List<Restaurant> restaurantes = restaurantService.getAllByCep(cep);
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+    }
+
+    @PutMapping("api/restaurantes/{id}")
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurante(
             @PathVariable Long id,
             @RequestBody RestaurantDTO restaurantDTO) {
 
@@ -40,12 +80,14 @@ public class RestauranteController {
         }
 
         Restaurant restaurant = restaurantMapper.toSource(restaurantDTO);
-        return restaurantMapper.toTarget(restaurantService.update(restaurant));
+        restaurant.setId(id);
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurantService.update(restaurant)));
     }
 
     @DeleteMapping("/restaurantes/{id}")
-    public void deleteRestaurante(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRestaurante(@PathVariable Long id) {
         restaurantService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
