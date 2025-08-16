@@ -14,10 +14,8 @@ import com.deliverytech.delivery.repository.IOrderRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class OrderService {
 
-    
     private IOrderRepository pedidoRepository;
 
     @Autowired

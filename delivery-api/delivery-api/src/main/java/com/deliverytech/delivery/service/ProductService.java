@@ -11,7 +11,6 @@ import com.deliverytech.delivery.repository.IProdutoRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class ProductService {
 
     private IProdutoRepository produtoRepository;

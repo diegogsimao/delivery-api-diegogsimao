@@ -11,7 +11,6 @@ import com.deliverytech.delivery.repository.IRestaurantRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class RestaurantService {
 
     private IRestaurantRepository restaurantRepository;

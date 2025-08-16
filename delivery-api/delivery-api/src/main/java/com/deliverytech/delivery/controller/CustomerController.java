@@ -18,11 +18,16 @@ import com.deliverytech.delivery.mapper.CustomerMapper;
 import com.deliverytech.delivery.service.CustomerService;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+@RequestMapping("api/cliente")
 @Tag(name = "Clientes", description = "APIs para gerenciamento de clientes")
-
 public class CustomerController {
 
     private CustomerService clienteService;
@@ -37,13 +42,25 @@ public class CustomerController {
         this.customerMapper = customerMapper;
     }
 
-    @PostMapping("api/clientes")
+    @PostMapping
+    @Operation(summary = "Cria um novo cliente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
     public ResponseEntity<CustomerResponseDTO> createCliente(@RequestBody CustomerDTO clienteDTO) {
         Customer entity = customerMapper.toSource(clienteDTO);
         return ResponseEntity.ok(customerMapper.toCustomerResponseDTO(clienteService.create(entity)));
     }
 
-    @GetMapping("api/clientes/{id}")
+    @GetMapping("{id}")
+    @Operation(summary = "Pesquisa um cliente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
     public ResponseEntity<CustomerResponseDTO> getCliente(@PathVariable Long id) {
         Customer entity = clienteService.findById(id);
         if (entity == null) {
@@ -53,12 +70,24 @@ public class CustomerController {
     }
 
     @GetMapping("api/clientes")
+    @Operation(summary = "Pesquisa todos os clientes")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Clientes não encontrados")
+    })
     public ResponseEntity<List<CustomerResponseDTO>> getAllClientes() {
         List<Customer> entities = clienteService.findAll();
         return ResponseEntity.ok(customerMapper.toCustomerResponseDTOList(entities));
     }
 
     @GetMapping("api/clientes/email/{email}")
+    @Operation(summary = "Pesquisa cliente por email")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Clientes não encontrados")
+    })
     public ResponseEntity<CustomerResponseDTO> getClienteByEmail(@PathVariable String email) {
         Customer entity = clienteService.findByEmail(email);
         if (entity == null) {
@@ -68,6 +97,12 @@ public class CustomerController {
     }
 
     @PutMapping("api/clientes/{id}")
+    @Operation(summary = "Atualiza os dados do  cliente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrados")
+    })
     public ResponseEntity<CustomerResponseDTO> updateCliente(@PathVariable Long id,
             @RequestBody CustomerDTO clienteDTO) {
         Customer entity = customerMapper.toSource(clienteDTO);
@@ -76,6 +111,12 @@ public class CustomerController {
     }
 
     @PatchMapping("api/clientes/{id}")
+    @Operation(summary = "Atualiza os dados do  cliente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrados")
+    })
     public ResponseEntity<CustomerResponseDTO> partialUpdateCliente(@PathVariable Long id,
             @RequestBody CustomerDTO clienteDTO) {
         Customer entity = customerMapper.toSource(clienteDTO);
