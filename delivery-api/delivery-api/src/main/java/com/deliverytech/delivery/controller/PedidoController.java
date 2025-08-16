@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.GetExchange;
 
+import com.deliverytech.delivery.DTOs.Response.OrderResponseDTO;
 import com.deliverytech.delivery.entity.Order;
 import com.deliverytech.delivery.mapper.OrderMapper;
 import com.deliverytech.delivery.service.OrderService;
@@ -32,35 +32,35 @@ public class PedidoController {
     }
 
     @PostMapping("/pedido")
-    public ResponseEntity<Order> createPedido(@RequestBody Order pedido) {
+    public ResponseEntity<OrderResponseDTO> createPedido(@RequestBody Order pedido) {
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido não pode ser nulo");
         }
 
-        return ResponseEntity.ok(pedidoService.create(pedido));
+        return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedidoService.create(pedido)));
     }
 
     @GetMapping("api/pedidos/{id}")
-    public ResponseEntity<Order> getPedidoById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponseDTO> getPedidoById(@PathVariable Long id) {
         Order pedido = pedidoService.findById(id);
         if (pedido == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(pedido);
+        return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedido));
     }
 
     @GetMapping("api/pedidos/cliente/{clienteId}/pedidos")
-    public ResponseEntity<List<Order>> getAllPedidosByCliente(@PathVariable Long clienteId) {
+    public ResponseEntity<List<OrderResponseDTO>> getAllPedidosByCliente(@PathVariable Long clienteId) {
         List<Order> pedidos = pedidoService.findByCustomerId(clienteId);
-        return ResponseEntity.ok(pedidos);
+        return ResponseEntity.ok(orderMapper.toOrderResponseDTOList(pedidos));
     }
 
     @PatchMapping("api/pedidos/{id}")
-    public ResponseEntity<Order> updatePedido(@PathVariable Long id, @RequestBody Order pedido) {
+    public ResponseEntity<OrderResponseDTO> updatePedido(@PathVariable Long id, @RequestBody Order pedido) {
         Order existingPedido = pedidoService.findById(id);
         if (existingPedido != null) {
             existingPedido.setStatus(pedido.getStatus());
-            return ResponseEntity.ok(pedidoService.update(existingPedido));
+            return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedidoService.update(existingPedido)));
         }
         return ResponseEntity.notFound().build();
     }

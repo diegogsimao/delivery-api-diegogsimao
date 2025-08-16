@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.PatchExchange;
 
-import com.deliverytech.delivery.DTOs.Requests.ProductDTO;
 import com.deliverytech.delivery.DTOs.Response.ProductResponseDTO;
 import com.deliverytech.delivery.entity.Product;
 import com.deliverytech.delivery.mapper.ProductMapper;

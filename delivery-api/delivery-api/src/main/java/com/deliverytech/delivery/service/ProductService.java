@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deliverytech.delivery.entity.Product;
-import com.deliverytech.delivery.entity.Restaurant;
 import com.deliverytech.delivery.repository.IProdutoRepository;
 
 import jakarta.transaction.Transactional;
@@ -34,7 +33,7 @@ public class ProductService {
 
     // Busca todos os produtos por ID do restaurante
     public List<Product> findByRestauranteId(Long restauranteId) {
-        
+
         if (restauranteId == null || restauranteId <= 0) {
             throw new IllegalArgumentException("ID do restaurante inválido");
         }
