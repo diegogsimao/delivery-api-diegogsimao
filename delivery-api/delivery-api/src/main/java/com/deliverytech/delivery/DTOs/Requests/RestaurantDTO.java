@@ -2,6 +2,11 @@ package com.deliverytech.delivery.DTOs.Requests;
 
 import java.math.BigDecimal;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 @SuppressWarnings("unused")
 public class RestaurantDTO {
     private Long id;

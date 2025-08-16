@@ -46,6 +46,9 @@ public class CustomerController {
     @GetMapping("api/clientes/{id}")
     public ResponseEntity<CustomerResponseDTO> getCliente(@PathVariable Long id) {
         Customer entity = clienteService.findById(id);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(customerMapper.toCustomerResponseDTO(entity));
     }
 
@@ -58,6 +61,9 @@ public class CustomerController {
     @GetMapping("api/clientes/email/{email}")
     public ResponseEntity<CustomerResponseDTO> getClienteByEmail(@PathVariable String email) {
         Customer entity = clienteService.findByEmail(email);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(customerMapper.toCustomerResponseDTO(entity));
     }
 

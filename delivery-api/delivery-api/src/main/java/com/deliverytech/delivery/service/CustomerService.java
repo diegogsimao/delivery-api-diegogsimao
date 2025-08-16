@@ -3,14 +3,18 @@ package com.deliverytech.delivery.service;
 import com.deliverytech.delivery.entity.Customer;
 import com.deliverytech.delivery.repository.ICustomerRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Service
-
+@Validated
 public class CustomerService {
 
     private ICustomerRepository clienteRepository;
@@ -28,24 +32,21 @@ public class CustomerService {
         }
 
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado: " + id));
     }
 
     // Busca um cliente pelo email
     public Customer findByEmail(String email) {
+
         if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Email do cliente não pode ser nulo ou vazio");
+            throw new EntityNotFoundException("Email do cliente não pode ser nulo ou vazio");
         }
         return clienteRepository.findByEmail(email);
     }
 
     // Criação de um novo cliente
     @Transactional
-    public Customer create(Customer cliente) {
-
-        if (cliente == null) {
-            throw new IllegalArgumentException("Cliente não pode ser nulo");
-        }
+    public Customer create(@NotNull(message = "Cliente não pode ser nulo") Customer cliente) {
 
         return clienteRepository.save(cliente);
     }
@@ -81,7 +82,7 @@ public class CustomerService {
 
     // Ativar ou desativar um cliente
     public Customer activeOrDesactiveCustomer(Long id) {
-        
+
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do cliente inválido: " + id);
         }
