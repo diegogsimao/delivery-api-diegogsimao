@@ -114,4 +114,11 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         return pedidoRepository.save(order);
     }
+
+    public List<Order> findByRestaurantId(Long restauranteId) {
+        if (restauranteId == null || restauranteId <= 0) {
+            throw new IllegalArgumentException("ID do restaurante inválido");
+        }
+        return pedidoRepository.findByRestaurantId(restauranteId);
+    }
 }

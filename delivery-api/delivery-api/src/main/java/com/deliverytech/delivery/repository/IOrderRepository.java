@@ -8,4 +8,6 @@ import com.deliverytech.delivery.entity.Order;
 
 public interface IOrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomerId(Long customerId);
+
+    List<Order> findByRestaurantId(Long restauranteId);
 }

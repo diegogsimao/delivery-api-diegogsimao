@@ -1,5 +1,6 @@
 package com.deliverytech.delivery.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverytech.delivery.DTOs.Response.OrderResponseDTO;
 import com.deliverytech.delivery.entity.Order;
+import com.deliverytech.delivery.entity.OrderItem;
 import com.deliverytech.delivery.mapper.OrderMapper;
 import com.deliverytech.delivery.service.OrderService;
 
@@ -39,7 +41,7 @@ public class PedidoController {
     }
 
     @PostMapping
-    @Operation(summary = "Cria um novo pedido")
+    @Operation(summary = "Cadastrar um novo pedido")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
@@ -68,6 +70,36 @@ public class PedidoController {
         return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedido));
     }
 
+    @PatchMapping("pedidos/{id}/status")
+    @Operation(summary = "Atualiza os dados do pedido")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Pedido atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+    })
+    public ResponseEntity<OrderResponseDTO> updatePedidoStatus(
+            @PathVariable Long id,
+            @RequestBody Order pedido) {
+        Order existingPedido = pedidoService.findById(id);
+        if (existingPedido != null) {
+            existingPedido.setStatus(pedido.getStatus());
+            return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedidoService.update(existingPedido)));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("pedidos/{id}")
+    @Operation(summary = "Deleta os dados do pedido")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Pedido deletado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+    })
+    public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
+        pedidoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/cliente/{clienteId}/pedidos")
     @Operation(summary = "Pesquisa todos pedidos de um cliente")
     @ApiResponses({
@@ -80,32 +112,32 @@ public class PedidoController {
         return ResponseEntity.ok(orderMapper.toOrderResponseDTOList(pedidos));
     }
 
-    @PatchMapping("{id}")
-    @Operation(summary = "Atualiza os dados do pedido")
+    @GetMapping("/api/restaurantes/{restauranteId}/pedidos")
+    @Operation(summary = "Pesquisa todos pedidos de um restaurante")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Pedido atualizado com sucesso"),
+            @ApiResponse(responseCode = "201", description = "Pedido pesquisado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    public ResponseEntity<OrderResponseDTO> updatePedido(@PathVariable Long id, @RequestBody Order pedido) {
-        Order existingPedido = pedidoService.findById(id);
-        if (existingPedido != null) {
-            existingPedido.setStatus(pedido.getStatus());
-            return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedidoService.update(existingPedido)));
+    public ResponseEntity<List<OrderResponseDTO>> getAllPedidosByRestaurante(@PathVariable Long restauranteId) {
+        List<Order> pedidos = pedidoService.findByRestaurantId(restauranteId);
+        return ResponseEntity.ok(orderMapper.toOrderResponseDTOList(pedidos));
+    }
+
+    @GetMapping("pedidos/calcular")
+    @Operation(summary = "Calcula o valor total de um pedido")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Valor total calculado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
+    public ResponseEntity<BigDecimal> calcularValorTotal(
+            @RequestBody List<OrderItem> itens) {
+
+        try {
+            Order order = pedidoService.calculateTotalOrder(itens);
+            return ResponseEntity.ok(order.getValorTotal());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.notFound().build();
     }
-
-    @DeleteMapping("api/pedidos/{id}")
-    @Operation(summary = "Deleta os dados do pedido")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Pedido deletado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
-    })
-    public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
-        pedidoService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
 }

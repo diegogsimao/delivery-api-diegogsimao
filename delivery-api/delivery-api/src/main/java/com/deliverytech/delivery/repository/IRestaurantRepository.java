@@ -19,5 +19,4 @@ public interface IRestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findAllByCep(String cep);
 
     List<Restaurant> findByName(String name);
-
 }
