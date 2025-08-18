@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @SuppressWarnings("unused")
 public class RestaurantDTO {
+
     private Long id;
+    private String cep;
     private String description;
     private String name;
     private String category;

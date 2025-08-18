@@ -34,8 +34,8 @@ public class RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
-    // Busca um restaurante pelo ID
     public Restaurant findById(Long id) {
+        // Busca um restaurante pelo ID
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do restaurante inválido: " + id);
         }
@@ -73,6 +73,17 @@ public class RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
+    public Restaurant updateActive(Restaurant restaurant) {
+        if (restaurant.getId() <= 0) {
+            throw new IllegalArgumentException("ID do restaurante inválido: " + restaurant.getId());
+        }
+
+        Restaurant _restaurant = findById(restaurant.getId());
+        restaurant.setActive(!_restaurant.isActive());
+
+        return restaurantRepository.save(restaurant);
+    }
+
     // Exclusão de um restaurant
     @Transactional
     public void delete(Long id) {
@@ -102,5 +113,40 @@ public class RestaurantService {
     private BigDecimal calculateDistanceFee(String cep) {
         BigDecimal distanceFee = new BigDecimal("5.00"); // Taxa fixa de R$5,00
         return distanceFee;
+    }
+
+    public List<Restaurant> findByActive() {
+        return restaurantRepository.findByActive();
+    }
+
+    public List<Restaurant> findByCep(String cep) {
+        return restaurantRepository.findAllByCep(cep);
+    }
+
+    public List<Restaurant> findByName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Nome do restaurante não pode ser nulo ou vazio");
+        }
+        return restaurantRepository.findByName(name);
+    }
+
+    public Double calcularTaxaEntrega(Long id, String cep) {
+        Restaurant restaurant = findById(id);
+        if (restaurant == null) {
+            throw new IllegalArgumentException("Restaurante não encontrado: " + id);
+        }
+
+        BigDecimal baseFee = restaurant.getDeliveryFee();
+        if (baseFee == null) {
+            throw new IllegalArgumentException("Taxa de entrega não definida para o restaurante: " + id);
+        }
+
+        if (cep == null || cep.isEmpty()) {
+            throw new IllegalArgumentException("CEP não pode ser nulo ou vazio");
+        }
+
+        BigDecimal distanceFee = calculateDistanceFee(cep);
+
+        return baseFee.add(distanceFee.multiply(baseFee)).doubleValue();
     }
 }

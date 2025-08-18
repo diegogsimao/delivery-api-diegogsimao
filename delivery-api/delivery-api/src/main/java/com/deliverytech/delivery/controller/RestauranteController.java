@@ -56,33 +56,9 @@ public class RestauranteController {
         return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restauranteCreate));
     }
 
-    @GetMapping("{id}")
-    @PostMapping
-    @Operation(summary = "Obtém um restaurante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Restaurante obtido com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
-    })
-    public ResponseEntity<RestaurantResponseDTO> getRestaurante(
-            @PathVariable Long id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("ID do restaurante inválido: " + id);
-        }
-
-        Restaurant restaurant = restaurantService.findById(id);
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurant));
-    }
-
-    @GetMapping
-    @Operation(summary = "Obtém uma lista de restaurantes")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Lista obtida com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "404", description = "Requisição inválida")
-    })
-    public ResponseEntity<List<RestaurantResponseDTO>> getAll() {
-        List<Restaurant> restaurantes = restaurantService.findAll();
+    @GetMapping("/ativo")
+    public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantesAtivos() {
+        List<Restaurant> restaurantes = restaurantService.findByActive();
         return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
     }
 
@@ -97,6 +73,22 @@ public class RestauranteController {
             @PathVariable String categoria) {
         List<Restaurant> restaurantes = restaurantService.getAllByCategory(categoria);
         return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+    }
+
+    @GetMapping("{id}")
+    @Operation(summary = "Obtém um restaurante por ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Restaurante obtido com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
+    })
+    public ResponseEntity<RestaurantResponseDTO> getRestaurante(@PathVariable Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do restaurante inválido: " + id);
+        }
+
+        Restaurant restaurant = restaurantService.findById(id);
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurant));
     }
 
     @PutMapping("/{id}")
@@ -119,15 +111,46 @@ public class RestauranteController {
         return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurantService.update(restaurant)));
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Deleta um restaurante")
+    @PatchMapping("/{id}")
+    @Operation(summary = "Ativa um restaurante")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Restaurante deletado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Restaurante ativado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
     })
-    public ResponseEntity<Void> deleteRestaurante(@PathVariable Long id) {
-        restaurantService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<RestaurantResponseDTO> updateActive(
+            @PathVariable Long id,
+            @RequestBody RestaurantDTO restaurantDTO) {
+
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do restaurante inválido: " + id);
+        }
+        // Conversão do DTO para a Entidade
+        Restaurant restaurant = restaurantMapper.toSource(restaurantDTO);
+        restaurant.setId(id);
+
+        // Atualizando o status do restaurante
+        Restaurant _Restaurant = restaurantService.updateActive(restaurant);
+        // Devolvendo a resposta para o usuário
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(_Restaurant));
     }
 
+    @GetMapping("/proximos/{cep}")
+    @Operation(summary = "Busca restaurantes com CEPs próximos")
+    public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantesByCep(
+            @PathVariable String cep) {
+
+        List<Restaurant> restaurantes = restaurantService.findByCep(cep);
+        return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+    }
+
+    @GetMapping("/{id}/taxa-entrega/{cep}")
+    @Operation(summary = "Busca a taxa de entrega de um restaurante")
+    public ResponseEntity<Double> getTaxaEntrega(
+            @PathVariable Long id,
+            @PathVariable String cep) {
+
+        Double taxaEntrega = restaurantService.calcularTaxaEntrega(id, cep);
+        return ResponseEntity.ok(taxaEntrega);
+    }
 }

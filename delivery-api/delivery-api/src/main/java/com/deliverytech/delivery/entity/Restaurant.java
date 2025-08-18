@@ -18,7 +18,6 @@ public class Restaurant {
 
     private String description;
     private String name;
-
     private String cep;
     private String category;
     private String address;

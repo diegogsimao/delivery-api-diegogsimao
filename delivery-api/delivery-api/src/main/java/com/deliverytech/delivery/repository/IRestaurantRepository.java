@@ -11,10 +11,13 @@ public interface IRestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     List<Restaurant> findAllByCategory(String category);
 
-    @Query("SELECT r FROM Restaurant r WHERE r.active = :active")
-    List<Restaurant> findByActive(boolean active);
+    @Query("SELECT r FROM Restaurant r WHERE r.active = true")
+    List<Restaurant> findByActive();
 
     boolean existsById(Long id);
 
     List<Restaurant> findAllByCep(String cep);
+
+    List<Restaurant> findByName(String name);
+
 }
