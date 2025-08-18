@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,20 +54,6 @@ public class ProdutoController {
         return productMapper.toProductResponseDTO(produtoService.create(produto));
     }
 
-    @GetMapping("/restaurantes/{restauranteId}/produtos")
-    @Operation(summary = "Cria um novo Produto")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Criado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado para restaurante pesquisado")
-    })
-    public ResponseEntity<List<ProductResponseDTO>> getProdutosByRestaurante(
-            @PathVariable Long restauranteId) {
-
-        List<Product> produtos = produtoService.findByRestauranteId(restauranteId);
-        return ResponseEntity.ok(productMapper.toProductResponseDTOList(produtos));
-    }
-
     @PutMapping("{id}")
     @Operation(summary = "Atualiza um Produto existente")
     @ApiResponses({
@@ -100,6 +87,32 @@ public class ProdutoController {
                 .ok(productMapper.toProductResponseDTO(produtoService.updateAvailable(id, disponibilidade)));
     }
 
+    @DeleteMapping("{id}")
+    @Operation(summary = "Remove um Produto existente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Removido com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado para restaurante pesquisado")
+    })
+    public ResponseEntity<Void> deleteProduto(@PathVariable Long id) {
+        produtoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/restaurantes/{restauranteId}/produtos")
+    @Operation(summary = "Cria um novo Produto")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado para restaurante pesquisado")
+    })
+    public ResponseEntity<List<ProductResponseDTO>> getProdutosByRestaurante(
+            @PathVariable Long restauranteId) {
+
+        List<Product> produtos = produtoService.findByRestauranteId(restauranteId);
+        return ResponseEntity.ok(productMapper.toProductResponseDTOList(produtos));
+    }
+
     @GetMapping("categoria/{categoria}")
     @Operation(summary = "Pesquisa um produto por categoria")
     @ApiResponses({
@@ -115,5 +128,22 @@ public class ProdutoController {
 
         return ResponseEntity
                 .ok(productMapper.toProductResponseDTOList(produtoService.findAllByCategoryName(categoria)));
+    }
+
+    @GetMapping("/api/produtos/buscar?nome={nome}")
+    @Operation(summary = "Pesquisa um produto por nome")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Pesquisa realizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado para nome pesquisado")
+    })
+    public ResponseEntity<List<ProductResponseDTO>> getProdutosByNome(
+            @PathVariable String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome inválido");
+        }
+
+        return ResponseEntity
+                .ok(productMapper.toProductResponseDTOList(produtoService.findByName(nome)));
     }
 }

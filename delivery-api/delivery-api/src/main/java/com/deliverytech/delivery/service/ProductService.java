@@ -81,4 +81,16 @@ public class ProductService {
         }
         return produtoRepository.findAllBycategoryName(categoryName);
     }
+
+    public void delete(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        produtoRepository.deleteById(id);
+    }
+
+    public List<Product> findByName(String nome) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByName'");
+    }
 }
