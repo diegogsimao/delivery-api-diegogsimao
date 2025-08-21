@@ -6,17 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deliverytech.delivery.entity.Product;
-import com.deliverytech.delivery.repository.IProdutoRepository;
+import com.deliverytech.delivery.repository.IProductRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class ProductService {
 
-    private IProdutoRepository produtoRepository;
+    private IProductRepository produtoRepository;
 
     @Autowired
-    public ProductService(IProdutoRepository produtoRepository) {
+    public ProductService(IProductRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
 
@@ -24,7 +27,7 @@ public class ProductService {
     @Transactional
     public Product create(Product produto) {
         if (produto == null) {
-            throw new IllegalArgumentException("Produto não pode ser nulo");
+            throw new EntityNotFoundException("Produto não pode ser nulo");
         }
 
         return produtoRepository.save(produto);
@@ -58,6 +61,7 @@ public class ProductService {
     // Atualiza um produto
     @Transactional
     public Product update(Product produto) {
+
         if (produto == null || produto.getId() == null || produto.getId() <= 0) {
             throw new IllegalArgumentException("Produto inválido");
         }

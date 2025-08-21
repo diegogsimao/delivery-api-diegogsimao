@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deliverytech.delivery.DTOs.Requests.OrderDTO;
 import com.deliverytech.delivery.DTOs.Response.OrderResponseDTO;
 import com.deliverytech.delivery.entity.Order;
 import com.deliverytech.delivery.entity.OrderItem;
 import com.deliverytech.delivery.mapper.OrderMapper;
-import com.deliverytech.delivery.service.OrderService;
+import com.deliverytech.delivery.service.OrderServiceImpl;
+import com.deliverytech.delivery.service.Interfaces.IOrderService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,16 +30,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("api/pedido")
 @Tag(name = "Pedidos", description = "Operações relacionadas a Pedidos")
-public class PedidoController {
+public class OrderController {
 
-    private OrderService pedidoService;
+    private IOrderService orderService;
     private OrderMapper orderMapper;
 
     @Autowired
-    public PedidoController(
-            OrderService pedidoService,
+    public OrderController(
+            IOrderService orderService,
             OrderMapper orderMapper) {
-        this.pedidoService = pedidoService;
+        this.orderService = orderService;
+        this.orderMapper = orderMapper;
     }
 
     @PostMapping
@@ -47,12 +50,14 @@ public class PedidoController {
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    public ResponseEntity<OrderResponseDTO> createPedido(@RequestBody Order pedido) {
+    public ResponseEntity<OrderResponseDTO> createPedido(
+            @RequestBody OrderDTO pedido) {
+
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido não pode ser nulo");
         }
 
-        return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedidoService.create(pedido)));
+        return ResponseEntity.ok(orderService.create(pedido));
     }
 
     @GetMapping("{id}")
@@ -63,7 +68,7 @@ public class PedidoController {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
     public ResponseEntity<OrderResponseDTO> getPedidoById(@PathVariable Long id) {
-        Order pedido = pedidoService.findById(id);
+        Order pedido = orderService.findById(id);
         if (pedido == null) {
             return ResponseEntity.notFound().build();
         }
@@ -80,10 +85,10 @@ public class PedidoController {
     public ResponseEntity<OrderResponseDTO> updatePedidoStatus(
             @PathVariable Long id,
             @RequestBody Order pedido) {
-        Order existingPedido = pedidoService.findById(id);
+        Order existingPedido = orderService.findById(id);
         if (existingPedido != null) {
             existingPedido.setStatus(pedido.getStatus());
-            return ResponseEntity.ok(orderMapper.toOrderResponseDTO(pedidoService.update(existingPedido)));
+            return ResponseEntity.ok(orderMapper.toOrderResponseDTO(orderService.update(existingPedido)));
         }
         return ResponseEntity.notFound().build();
     }
@@ -96,7 +101,7 @@ public class PedidoController {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
     public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
-        pedidoService.delete(id);
+        orderService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -108,7 +113,7 @@ public class PedidoController {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
     public ResponseEntity<List<OrderResponseDTO>> getAllPedidosByCliente(@PathVariable Long clienteId) {
-        List<Order> pedidos = pedidoService.findByCustomerId(clienteId);
+        List<Order> pedidos = orderService.findByCustomerId(clienteId);
         return ResponseEntity.ok(orderMapper.toOrderResponseDTOList(pedidos));
     }
 
@@ -120,7 +125,7 @@ public class PedidoController {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
     public ResponseEntity<List<OrderResponseDTO>> getAllPedidosByRestaurante(@PathVariable Long restauranteId) {
-        List<Order> pedidos = pedidoService.findByRestaurantId(restauranteId);
+        List<Order> pedidos = orderService.findByRestaurantId(restauranteId);
         return ResponseEntity.ok(orderMapper.toOrderResponseDTOList(pedidos));
     }
 
@@ -134,7 +139,7 @@ public class PedidoController {
             @RequestBody List<OrderItem> itens) {
 
         try {
-            Order order = pedidoService.calculateTotalOrder(itens);
+            Order order = orderService.calculateTotalOrder(itens);
             return ResponseEntity.ok(order.getValorTotal());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

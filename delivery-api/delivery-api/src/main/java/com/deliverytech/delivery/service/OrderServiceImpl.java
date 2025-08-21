@@ -6,38 +6,56 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.deliverytech.delivery.DTOs.Requests.OrderDTO;
+import com.deliverytech.delivery.DTOs.Response.OrderResponseDTO;
+import com.deliverytech.delivery.mapper.OrderMapper;
 import com.deliverytech.delivery.entity.Order;
 import com.deliverytech.delivery.entity.OrderItem;
 import com.deliverytech.delivery.entity.enums.OrderStatus;
 import com.deliverytech.delivery.repository.IOrderRepository;
+import com.deliverytech.delivery.service.Interfaces.IOrderService;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class OrderService {
+@Transactional
+public class OrderServiceImpl implements IOrderService {
 
     private IOrderRepository pedidoRepository;
+    private OrderMapper orderMapper;
 
     @Autowired
-    public OrderService(IOrderRepository pedidoRepository) {
+    public OrderServiceImpl(
+            IOrderRepository pedidoRepository,
+            OrderMapper orderMapper) {
+
         this.pedidoRepository = pedidoRepository;
+        this.orderMapper = orderMapper;
     }
 
     @Transactional
     // Cria um pedido
-    public Order create(Order pedido) {
+    public OrderResponseDTO create(OrderDTO pedido) {
+
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido não pode ser nulo");
         }
-        return pedidoRepository.save(pedido);
+
+        // Mapeamento da DTO para Entity
+        Order order = orderMapper.toSource(pedido);
+
+        // Retorno já mapeia de Entity para DTO
+        return orderMapper.toOrderResponseDTO(pedidoRepository.save(order));
     }
 
     @Transactional
     // Atualiza um pedido
     public Order update(Order pedido) {
+
         if (pedido == null || pedido.getId() == null) {
             throw new IllegalArgumentException("Pedido ou ID do pedido não pode ser nulo");
         }
+
         return pedidoRepository.save(pedido);
     }
 
@@ -71,6 +89,7 @@ public class OrderService {
         return pedidoRepository.findByCustomerId(customerId);
     }
 
+    @Transactional
     // Atualiza o status do pedido
     public Order updateOrderStatus(Long id, OrderStatus status) {
         Order order = findById(id);

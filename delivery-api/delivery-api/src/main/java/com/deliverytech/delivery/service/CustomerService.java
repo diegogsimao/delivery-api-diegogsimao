@@ -2,6 +2,7 @@ package com.deliverytech.delivery.service;
 
 import com.deliverytech.delivery.entity.Customer;
 import com.deliverytech.delivery.repository.ICustomerRepository;
+import com.deliverytech.delivery.service.Interfaces.ICustomerService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Service
 @Validated
-public class CustomerService {
+public class CustomerService implements ICustomerService {
 
     private ICustomerRepository clienteRepository;
 

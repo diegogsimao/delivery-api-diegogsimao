@@ -27,13 +27,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("api/produto")
 @Tag(name = "Produtos", description = "Operações relacionadas a Produtos")
-public class ProdutoController {
+public class ProductController {
 
     private ProductService produtoService;
     private ProductMapper productMapper;
 
     @Autowired
-    public ProdutoController(
+    public ProductController(
             ProductService produtoService,
             ProductMapper productMapper) {
         this.produtoService = produtoService;

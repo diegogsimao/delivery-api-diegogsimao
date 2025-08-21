@@ -22,13 +22,13 @@ import jakarta.validation.constraints.NotNull;
 @RestController
 @RequestMapping("api/restaurantes")
 @Tag(name = "Restaurantes", description = "Operações relacionadas a restaurantes")
-public class RestauranteController {
+public class RestaurantController {
 
     private RestaurantService restaurantService;
     private RestaurantMapper restaurantMapper;
 
     @Autowired
-    public RestauranteController(
+    public RestaurantController(
             RestaurantService restaurantService,
             RestaurantMapper restaurantMapper) {
         this.restaurantService = restaurantService;

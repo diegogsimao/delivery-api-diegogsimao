@@ -7,11 +7,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.deliverytech.delivery.entity.Product;
 
-public interface IProdutoRepository extends JpaRepository<Product, Long> {
+public interface IProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByAvailableTrueAndRestaurantsId(Long restaurantId);
 
     List<Product> findAllBycategoryName(@Param("categoryName") String categoryName);
 
     List<Product> findByRestaurantsId(Long restaurantId);
+
+
 }
