@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverytech.delivery.DTOs.Requests.CustomerDTO;
 import com.deliverytech.delivery.DTOs.Response.CustomerResponseDTO;
-import com.deliverytech.delivery.Helpers.ApiResponseCustom;
+import com.deliverytech.delivery.Utils.ApiResponseCustom;
 import com.deliverytech.delivery.entity.Customer;
 import com.deliverytech.delivery.mapper.CustomerMapper;
 import com.deliverytech.delivery.service.CustomerService;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +30,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+
 @RequestMapping("api/cliente")
+
 @Tag(name = "Clientes", description = "APIs para gerenciamento de clientes")
 public class CustomerController {
 
@@ -58,11 +58,9 @@ public class CustomerController {
         public ResponseEntity<ApiResponseCustom<CustomerResponseDTO>> createCliente(
                         @RequestBody CustomerDTO clienteDTO) {
 
-                Customer entity = customerMapper.toSource(clienteDTO);
-                return ResponseEntity.ok(
-                                new ApiResponseCustom<>(true,
-                                                customerMapper.toCustomerResponseDTO(clienteService.create(entity)),
-                                                null));
+                return ResponseEntity.ok(new ApiResponseCustom<>(true,
+                                clienteService.create(clienteDTO),
+                                null));
         }
 
         @GetMapping("{id}")
@@ -74,14 +72,10 @@ public class CustomerController {
         })
         public ResponseEntity<ApiResponseCustom<CustomerResponseDTO>> getCliente(
                         @PathVariable Long id) {
-                Customer entity = clienteService.findById(id);
-                if (entity == null) {
-                        return ResponseEntity.notFound().build();
-                }
-                return ResponseEntity.ok(
-                                new ApiResponseCustom<>(true,
-                                                customerMapper.toCustomerResponseDTO(entity),
-                                                null));
+
+                return ResponseEntity.ok(new ApiResponseCustom<>(true,
+                                clienteService.findById(id),
+                                null));
         }
 
         @GetMapping("api/clientes")
@@ -94,8 +88,8 @@ public class CustomerController {
         public ResponseEntity<List<CustomerResponseDTO>> getAllClientes(
                         @PageableDefault(size = 10) Pageable pageable) {
 
-                List<Customer> entities = clienteService.findAll();
-                return ResponseEntity.ok(customerMapper.toCustomerResponseDTOList(entities));
+                List<CustomerResponseDTO> entities = clienteService.findAll();
+                return ResponseEntity.ok(entities);
         }
 
         @GetMapping("api/clientes/email/{email}")
@@ -105,12 +99,12 @@ public class CustomerController {
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                         @ApiResponse(responseCode = "404", description = "Clientes não encontrados")
         })
-        public ResponseEntity<CustomerResponseDTO> getClienteByEmail(@PathVariable String email) {
-                Customer entity = clienteService.findByEmail(email);
-                if (entity == null) {
-                        return ResponseEntity.notFound().build();
-                }
-                return ResponseEntity.ok(customerMapper.toCustomerResponseDTO(entity));
+        public ResponseEntity<CustomerResponseDTO> getClienteByEmail(
+                        @PathVariable String email) {
+
+                CustomerResponseDTO entity = clienteService.findByEmail(email);
+
+                return ResponseEntity.ok(entity);
         }
 
         @PutMapping("api/clientes/{id}")
@@ -120,11 +114,11 @@ public class CustomerController {
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                         @ApiResponse(responseCode = "404", description = "Cliente não encontrados")
         })
-        public ResponseEntity<CustomerResponseDTO> updateCliente(@PathVariable Long id,
+        public ResponseEntity<CustomerResponseDTO> updateCliente(
+                        @PathVariable Long id,
                         @RequestBody CustomerDTO clienteDTO) {
-                Customer entity = customerMapper.toSource(clienteDTO);
-                entity.setId(id);
-                return ResponseEntity.ok(customerMapper.toCustomerResponseDTO(clienteService.update(entity)));
+
+                return ResponseEntity.ok(clienteService.update(clienteDTO));
         }
 
         @PatchMapping("api/clientes/{id}")
@@ -134,10 +128,9 @@ public class CustomerController {
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                         @ApiResponse(responseCode = "404", description = "Cliente não encontrados")
         })
-        public ResponseEntity<CustomerResponseDTO> partialUpdateCliente(@PathVariable Long id,
+        public ResponseEntity<CustomerResponseDTO> partialUpdateCliente(
+                        @PathVariable Long id,
                         @RequestBody CustomerDTO clienteDTO) {
-                Customer entity = customerMapper.toSource(clienteDTO);
-                entity.setId(id);
-                return ResponseEntity.ok(customerMapper.toCustomerResponseDTO(clienteService.update(entity)));
+                return ResponseEntity.ok(clienteService.update(clienteDTO));
         }
 }

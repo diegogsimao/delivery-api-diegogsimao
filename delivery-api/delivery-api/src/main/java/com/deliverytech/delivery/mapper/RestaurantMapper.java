@@ -11,8 +11,9 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RestaurantMapper extends GenericMapper<Restaurant, RestaurantDTO> {
-    RestaurantResponseDTO toProductResponseDTO(Restaurant target);
 
-    List<RestaurantResponseDTO> toProductResponseDTOList(List<Restaurant> target);
+    RestaurantResponseDTO toEntityFromResponseDTO(Restaurant target);
+
+    List<RestaurantResponseDTO> toListFromRestaurantResponseDTOs(List<Restaurant> target);
 
 }

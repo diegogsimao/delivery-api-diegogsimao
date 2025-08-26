@@ -15,6 +15,7 @@ import com.deliverytech.delivery.entity.enums.OrderStatus;
 @Entity
 @Data
 @Table(name = "Orders")
+
 public class Order {
 
     @Id

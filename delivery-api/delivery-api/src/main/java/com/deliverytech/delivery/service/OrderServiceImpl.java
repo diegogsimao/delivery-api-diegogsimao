@@ -1,6 +1,5 @@
 package com.deliverytech.delivery.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,53 +9,55 @@ import com.deliverytech.delivery.DTOs.Requests.OrderDTO;
 import com.deliverytech.delivery.DTOs.Response.OrderResponseDTO;
 import com.deliverytech.delivery.mapper.OrderMapper;
 import com.deliverytech.delivery.entity.Order;
-import com.deliverytech.delivery.entity.OrderItem;
 import com.deliverytech.delivery.entity.enums.OrderStatus;
+import com.deliverytech.delivery.exceptions.EntityNotFoundException;
+// import com.deliverytech.delivery.exceptions.EntityNotFoundException;
 import com.deliverytech.delivery.repository.IOrderRepository;
 import com.deliverytech.delivery.service.Interfaces.IOrderService;
 
 import jakarta.transaction.Transactional;
 
+//import jakarta.transaction.Transactional;
+
 @Service
-@Transactional
 public class OrderServiceImpl implements IOrderService {
 
-    private IOrderRepository pedidoRepository;
+    private IOrderRepository orderRepository;
     private OrderMapper orderMapper;
 
     @Autowired
     public OrderServiceImpl(
-            IOrderRepository pedidoRepository,
+            IOrderRepository orderRepository,
             OrderMapper orderMapper) {
-
-        this.pedidoRepository = pedidoRepository;
+        this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
     }
 
     @Transactional
-    // Cria um pedido
-    public OrderResponseDTO create(OrderDTO pedido) {
+    public OrderResponseDTO createOrder(OrderDTO orderDTO) {
 
-        if (pedido == null) {
-            throw new IllegalArgumentException("Pedido não pode ser nulo");
+        if (orderDTO == null) {
+            throw new EntityNotFoundException("Order cannot be null");
         }
 
         // Mapeamento da DTO para Entity
-        Order order = orderMapper.toSource(pedido);
+        Order order = orderMapper.toSource(orderDTO);
 
         // Retorno já mapeia de Entity para DTO
-        return orderMapper.toOrderResponseDTO(pedidoRepository.save(order));
+        return orderMapper.toOrderResponseDTO(orderRepository.save(order));
     }
 
     @Transactional
     // Atualiza um pedido
-    public Order update(Order pedido) {
+    public OrderResponseDTO update(OrderDTO order) {
 
-        if (pedido == null || pedido.getId() == null) {
+        if (order == null || order.getId() == null) {
             throw new IllegalArgumentException("Pedido ou ID do pedido não pode ser nulo");
         }
 
-        return pedidoRepository.save(pedido);
+        // Mapeamento da DTO para Entity
+        Order existingOrder = orderMapper.toSource(order);
+        return orderMapper.toOrderResponseDTO(orderRepository.save(existingOrder));
     }
 
     @Transactional
@@ -64,60 +65,42 @@ public class OrderServiceImpl implements IOrderService {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID inválido");
         }
-        Order pedido = findById(id);
-        if (pedido != null) {
-            pedidoRepository.delete(pedido);
+
+        Order order = orderRepository.findById(id).orElse(null);
+
+        if (order != null) {
+            orderRepository.delete(order);
         } else {
             throw new IllegalArgumentException("Pedido não encontrado com o ID: " + id);
         }
     }
 
     // Busca um pedido por ID
-    public Order findById(Long id) {
+    public OrderResponseDTO findById(Long id) {
+
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID inválido");
         }
-        return pedidoRepository.findById(id)
+        return orderRepository.findById(id)
+                .map(orderMapper::toOrderResponseDTO)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado com o ID: " + id));
-    }
-
-    // Busca todos os pedidos por ID do clientes
-    public List<Order> findByCustomerId(Long customerId) {
-        if (customerId == null || customerId <= 0) {
-            throw new IllegalArgumentException("ID do cliente inválido");
-        }
-        return pedidoRepository.findByCustomerId(customerId);
     }
 
     @Transactional
     // Atualiza o status do pedido
-    public Order updateOrderStatus(Long id, OrderStatus status) {
-        Order order = findById(id);
+    public OrderResponseDTO updateOrderStatus(Long id, OrderStatus status) {
+        Order order = orderRepository.findById(id).orElse(null);
         if (order == null) {
             throw new IllegalArgumentException("Pedido não encontrado com o ID: " + id);
         }
         order.setStatus(status);
-        return pedidoRepository.save(order);
-    }
-
-    public Order calculateTotalOrder(List<OrderItem> itens) {
-
-        if (itens == null || itens.isEmpty()) {
-            throw new IllegalArgumentException("Lista de itens não pode ser nula ou vazia");
-        }
-
-        BigDecimal total = itens.stream()
-                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        Order order = new Order();
-        order.setValorTotal(total);
-        return order;
+        return orderMapper.toOrderResponseDTO(orderRepository.save(order));
     }
 
     // Cancela um pedido
-    public Order cancelOrder(Long id) {
-        Order order = findById(id);
+    @Transactional
+    public OrderResponseDTO cancelOrder(Long id) {
+        Order order = orderRepository.findById(id).orElse(null);
         if (order == null) {
             throw new IllegalArgumentException("Pedido não encontrado com o ID: " + id);
         }
@@ -131,13 +114,7 @@ public class OrderServiceImpl implements IOrderService {
         }
 
         order.setStatus(OrderStatus.CANCELLED);
-        return pedidoRepository.save(order);
+        return orderMapper.toOrderResponseDTO(orderRepository.save(order));
     }
 
-    public List<Order> findByRestaurantId(Long restauranteId) {
-        if (restauranteId == null || restauranteId <= 0) {
-            throw new IllegalArgumentException("ID do restaurante inválido");
-        }
-        return pedidoRepository.findByRestaurantId(restauranteId);
-    }
 }

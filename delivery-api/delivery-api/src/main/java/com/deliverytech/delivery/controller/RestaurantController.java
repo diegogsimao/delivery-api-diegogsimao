@@ -1,3 +1,4 @@
+
 package com.deliverytech.delivery.controller;
 
 import java.util.List;
@@ -8,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.deliverytech.delivery.DTOs.Requests.RestaurantDTO;
 import com.deliverytech.delivery.DTOs.Response.RestaurantResponseDTO;
-import com.deliverytech.delivery.entity.Restaurant;
-import com.deliverytech.delivery.mapper.RestaurantMapper;
 import com.deliverytech.delivery.service.RestaurantService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,17 +24,15 @@ import jakarta.validation.constraints.NotNull;
 public class RestaurantController {
 
     private RestaurantService restaurantService;
-    private RestaurantMapper restaurantMapper;
 
     @Autowired
     public RestaurantController(
-            RestaurantService restaurantService,
-            RestaurantMapper restaurantMapper) {
+            RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
-        this.restaurantMapper = restaurantMapper;
     }
 
     // Cria um restaurante
+
     @PostMapping
     @Operation(summary = "Cria um novo restaurante")
     @ApiResponses({
@@ -46,20 +43,13 @@ public class RestaurantController {
     public ResponseEntity<RestaurantResponseDTO> createRestaurante(
             @NotNull @RequestBody RestaurantDTO restauranteDTO) {
 
-        Restaurant restaurant = restaurantMapper.toSource(restauranteDTO);
-        Restaurant restauranteCreate = restaurantService.create(restaurant);
-
-        if (restauranteCreate == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restauranteCreate));
+        return ResponseEntity.ok(restaurantService.create(restauranteDTO));
     }
 
     @GetMapping("/ativo")
     public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantesAtivos() {
-        List<Restaurant> restaurantes = restaurantService.findByActive();
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+
+        return ResponseEntity.ok(restaurantService.findByActive());
     }
 
     @GetMapping("/categoria/{categoria}")
@@ -71,8 +61,8 @@ public class RestaurantController {
     })
     public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantesByCategoria(
             @PathVariable String categoria) {
-        List<Restaurant> restaurantes = restaurantService.getAllByCategory(categoria);
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+
+        return ResponseEntity.ok(restaurantService.getAllByCategory(categoria));
     }
 
     @GetMapping("{id}")
@@ -86,9 +76,7 @@ public class RestaurantController {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do restaurante inválido: " + id);
         }
-
-        Restaurant restaurant = restaurantService.findById(id);
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurant));
+        return ResponseEntity.ok(restaurantService.findById(id));
     }
 
     @PutMapping("/{id}")
@@ -106,9 +94,7 @@ public class RestaurantController {
             throw new IllegalArgumentException("ID do restaurante inválido: " + id);
         }
 
-        Restaurant restaurant = restaurantMapper.toSource(restaurantDTO);
-        restaurant.setId(id);
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(restaurantService.update(restaurant)));
+        return ResponseEntity.ok(restaurantService.update(restaurantDTO));
     }
 
     @PatchMapping("/{id}")
@@ -125,14 +111,8 @@ public class RestaurantController {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID do restaurante inválido: " + id);
         }
-        // Conversão do DTO para a Entidade
-        Restaurant restaurant = restaurantMapper.toSource(restaurantDTO);
-        restaurant.setId(id);
-
-        // Atualizando o status do restaurante
-        Restaurant _Restaurant = restaurantService.updateActive(restaurant);
         // Devolvendo a resposta para o usuário
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTO(_Restaurant));
+        return ResponseEntity.ok(restaurantService.updateActive(restaurantDTO));
     }
 
     @GetMapping("/proximos/{cep}")
@@ -140,17 +120,20 @@ public class RestaurantController {
     public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantesByCep(
             @PathVariable String cep) {
 
-        List<Restaurant> restaurantes = restaurantService.findByCep(cep);
-        return ResponseEntity.ok(restaurantMapper.toProductResponseDTOList(restaurantes));
+        return ResponseEntity.ok(restaurantService.findByCep(cep));
     }
 
     @GetMapping("/{id}/taxa-entrega/{cep}")
+
     @Operation(summary = "Busca a taxa de entrega de um restaurante")
     public ResponseEntity<Double> getTaxaEntrega(
+
             @PathVariable Long id,
+
             @PathVariable String cep) {
 
         Double taxaEntrega = restaurantService.calcularTaxaEntrega(id, cep);
         return ResponseEntity.ok(taxaEntrega);
     }
+
 }

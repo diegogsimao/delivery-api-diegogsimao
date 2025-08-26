@@ -11,6 +11,7 @@ import com.deliverytech.delivery.entity.Customer;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CustomerMapper extends GenericMapper<Customer, CustomerDTO> {
+
     CustomerResponseDTO toCustomerResponseDTO(Customer target);
 
     List<CustomerResponseDTO> toCustomerResponseDTOList(List<Customer> target);

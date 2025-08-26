@@ -5,85 +5,91 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.deliverytech.delivery.DTOs.Requests.ProductDTO;
+import com.deliverytech.delivery.DTOs.Response.ProductResponseDTO;
 import com.deliverytech.delivery.entity.Product;
+import com.deliverytech.delivery.mapper.ProductMapper;
 import com.deliverytech.delivery.repository.IProductRepository;
+import com.deliverytech.delivery.service.Interfaces.IProductService;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
-public class ProductService {
+public class ProductService implements IProductService {
 
     private IProductRepository produtoRepository;
+    private ProductMapper productMapper;
 
     @Autowired
-    public ProductService(IProductRepository produtoRepository) {
+    public ProductService(
+            IProductRepository produtoRepository,
+            ProductMapper productMapper) {
+
         this.produtoRepository = produtoRepository;
+        this.productMapper = productMapper;
     }
 
     // Cria um produto
     @Transactional
-    public Product create(Product produto) {
+    public ProductResponseDTO create(ProductDTO produto) {
+
         if (produto == null) {
             throw new EntityNotFoundException("Produto não pode ser nulo");
         }
 
-        return produtoRepository.save(produto);
+        Product produtoSalvo = produtoRepository.save(productMapper.toSource(produto));
+        return productMapper.toProductResponseDTO(produtoSalvo);
     }
 
     // Busca todos os produtos por ID do restaurante
-    public List<Product> findByRestauranteId(Long restauranteId) {
+    public ProductResponseDTO findByRestauranteId(Long restauranteId) {
 
         if (restauranteId == null || restauranteId <= 0) {
             throw new IllegalArgumentException("ID do restaurante inválido");
         }
-        return produtoRepository.findByRestaurantsId(restauranteId);
+        return productMapper.toProductResponseDTO(
+                produtoRepository.findByRestaurantsId(restauranteId));
     }
 
     // Busca todos os produtos ativos por ID do restaurante
-    public List<Product> findByAvailableTrueAndRestaurantsId(long restaurantId) {
+    public List<ProductResponseDTO> findByAvailableTrueAndRestaurantsId(long restaurantId) {
         if (restaurantId <= 0) {
             throw new IllegalArgumentException("ID do restaurante inválido");
         }
-        return produtoRepository.findByAvailableTrueAndRestaurantsId(restaurantId);
+        return productMapper.toProductResponseDTOList(
+                produtoRepository.findByAvailableTrueAndRestaurantsId(restaurantId));
     }
 
     // Busca um produto por ID
-    public Product findById(Long id) {
+    public ProductResponseDTO findById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID inválido");
         }
-        return produtoRepository.findById(id).orElse(null);
+        return produtoRepository.findById(id)
+                .map(productMapper::toProductResponseDTO)
+                .orElse(null);
     }
 
     // Atualiza um produto
     @Transactional
-    public Product update(Product produto) {
+    public ProductResponseDTO update(ProductDTO produto) {
 
         if (produto == null || produto.getId() == null || produto.getId() <= 0) {
             throw new IllegalArgumentException("Produto inválido");
         }
-        return produtoRepository.save(produto);
+        Product produtoAtualizado = produtoRepository.save(productMapper.toSource(produto));
+        return productMapper.toProductResponseDTO(produtoAtualizado);
     }
 
     // Altera a disponibilidade de um produto
-    public Product updateAvailable(Long id, boolean available) {
-        Product produto = findById(id);
-        if (produto == null) {
-            throw new IllegalArgumentException("Produto não encontrado");
-        }
-        produto.setAvailable(available);
-        return produtoRepository.save(produto);
-    }
+    public ProductResponseDTO updateAvailable(Long id, boolean available) {
 
-    // Busca todos os produtos por ID da categoria
-    public List<Product> findAllByCategoryName(String categoryName) {
-        if (categoryName == null || categoryName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome da categoria inválido");
-        }
-        return produtoRepository.findAllBycategoryName(categoryName);
+        Product produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+
+        produto.setAvailable(available);
+        return productMapper.toProductResponseDTO(produtoRepository.save(produto));
     }
 
     public void delete(Long id) {
@@ -91,10 +97,5 @@ public class ProductService {
             throw new IllegalArgumentException("ID inválido");
         }
         produtoRepository.deleteById(id);
-    }
-
-    public List<Product> findByName(String nome) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByName'");
     }
 }

@@ -2,28 +2,24 @@ package com.deliverytech.delivery.service.Interfaces;
 
 import java.util.List;
 
-import com.deliverytech.delivery.entity.Product;
+import com.deliverytech.delivery.DTOs.Requests.ProductDTO;
+import com.deliverytech.delivery.DTOs.Response.ProductResponseDTO;
 
 public interface IProductService {
 
-    public Product create(Product produto);
+    public ProductResponseDTO create(ProductDTO produto);
 
-    public List<Product> findByRestauranteId(Long restauranteId);
+    public ProductResponseDTO findByRestauranteId(Long restauranteId);
 
-    public List<Product> findByAvailableTrueAndRestaurantsId(long restaurantId);
+    public List<ProductResponseDTO> findByAvailableTrueAndRestaurantsId(long restaurantId);
 
-    public Product findById(Long id);
+    public ProductResponseDTO findById(Long id);
 
-    public Product update(Product produto);
+    public ProductResponseDTO update(ProductDTO produto);
 
     // Altera a disponibilidade de um produto'
-    public Product updateAvailable(Long id, boolean available);
-
-    // Busca todos os produtos por ID da categoria
-    public List<Product> findAllByCategoryName(String categoryName);
+    public ProductResponseDTO updateAvailable(Long id, boolean available);
 
     public void delete(Long id);
-
-    public List<Product> findByName(String nome);
 
 }

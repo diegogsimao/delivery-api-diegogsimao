@@ -2,24 +2,26 @@ package com.deliverytech.delivery.service.Interfaces;
 
 import java.util.List;
 
+import com.deliverytech.delivery.DTOs.Requests.CustomerDTO;
+import com.deliverytech.delivery.DTOs.Response.CustomerResponseDTO;
 import com.deliverytech.delivery.entity.Customer;
 
 import jakarta.validation.constraints.NotNull;
 
 public interface ICustomerService {
-    public Customer findById(Long id);
+    public CustomerResponseDTO findById(Long id);
 
-    public Customer findByEmail(String email);
+    public CustomerResponseDTO findByEmail(String email);
 
-    public Customer create(@NotNull(message = "Cliente não pode ser nulo") Customer cliente);
+    public CustomerResponseDTO create(@NotNull(message = "Cliente não pode ser nulo") CustomerDTO cliente);
 
-    public Customer delete(Long id);
+    public void delete(Long id);
 
-    public Customer update(Customer customer);
+    public CustomerResponseDTO update(CustomerDTO customer);
 
-    public Customer activeOrDesactiveCustomer(Long id);
+    public CustomerResponseDTO activeOrDesactiveCustomer(Long id);
 
-    public List<Customer> findAll();
+    public List<CustomerResponseDTO> findAll();
 
-    public List<Customer> getListCustomerActive();
+    public List<CustomerResponseDTO> getListCustomerActive();
 }

@@ -13,7 +13,5 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findAllBycategoryName(@Param("categoryName") String categoryName);
 
-    List<Product> findByRestaurantsId(Long restaurantId);
-
-
+    Product findByRestaurantsId(Long restaurantId);
 }

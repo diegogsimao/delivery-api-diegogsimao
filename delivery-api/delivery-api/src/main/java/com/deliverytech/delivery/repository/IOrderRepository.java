@@ -1,13 +1,13 @@
 package com.deliverytech.delivery.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.deliverytech.delivery.entity.Order;
+import com.deliverytech.delivery.repository.Interfaces.IOrderRepositoryImpl;
+import com.deliverytech.delivery.service.Interfaces.IOrderService;
 
-public interface IOrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByCustomerId(Long customerId);
+@Repository
+public interface IOrderRepository extends JpaRepository<Order, Long>, IOrderRepositoryImpl {
 
-    List<Order> findByRestaurantId(Long restauranteId);
 }

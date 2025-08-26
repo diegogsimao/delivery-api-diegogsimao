@@ -2,7 +2,9 @@ package com.deliverytech.delivery.DTOs.Requests;
 
 import java.math.BigDecimal;
 
-@SuppressWarnings("unused")
+import lombok.Data;
+
+@Data
 public class ProductDTO {
     private Long id;
     private String description;
