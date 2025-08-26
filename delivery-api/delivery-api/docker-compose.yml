@@ -7,7 +7,7 @@ services:
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: delivery_db
       MYSQL_USER: sa
-      MYSQL_PASSWORD: "@8436#Dgs$"
+      MYSQL_PASSWORD: "12456$"
     ports:
       - "3306:3306"
     volumes:
