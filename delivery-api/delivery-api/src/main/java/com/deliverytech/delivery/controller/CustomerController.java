@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.deliverytech.delivery.DTOs.Requests.CustomerDTO;
 import com.deliverytech.delivery.DTOs.Response.CustomerResponseDTO;
 import com.deliverytech.delivery.Utils.ApiResponseCustom;
-import com.deliverytech.delivery.entity.Customer;
 import com.deliverytech.delivery.mapper.CustomerMapper;
 import com.deliverytech.delivery.service.CustomerService;
 

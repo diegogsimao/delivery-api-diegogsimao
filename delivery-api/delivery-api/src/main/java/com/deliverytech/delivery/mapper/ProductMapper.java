@@ -11,7 +11,6 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProductMapper extends GenericMapper<Product, ProductDTO> {
-
     ProductResponseDTO toProductResponseDTO(Product target);
 
     List<ProductResponseDTO> toProductResponseDTOList(List<Product> target);

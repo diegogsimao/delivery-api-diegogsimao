@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.deliverytech.delivery.DTOs.Requests.CustomerDTO;
 import com.deliverytech.delivery.DTOs.Response.CustomerResponseDTO;
-import com.deliverytech.delivery.entity.Customer;
 
 import jakarta.validation.constraints.NotNull;
 
