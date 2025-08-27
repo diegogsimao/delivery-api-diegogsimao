@@ -9,7 +9,7 @@ import com.deliverytech.delivery.DTOs.Response.RestaurantResponseDTO;
 import com.deliverytech.delivery.entity.Restaurant;
 import com.deliverytech.delivery.exceptions.EntityNotFoundException;
 import com.deliverytech.delivery.mapper.RestaurantMapper;
-import com.deliverytech.delivery.repository.IRestaurantRepository;
+import com.deliverytech.delivery.repository.Interfaces.IRestaurantRepository;
 import com.deliverytech.delivery.service.Interfaces.IRestaurantService;
 
 import jakarta.transaction.Transactional;

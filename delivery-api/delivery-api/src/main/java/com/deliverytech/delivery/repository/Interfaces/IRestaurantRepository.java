@@ -1,4 +1,4 @@
-package com.deliverytech.delivery.repository;
+package com.deliverytech.delivery.repository.Interfaces;
 
 import java.util.List;
 

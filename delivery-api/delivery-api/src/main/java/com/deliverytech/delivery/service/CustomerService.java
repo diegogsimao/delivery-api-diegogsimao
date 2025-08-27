@@ -4,14 +4,13 @@ import com.deliverytech.delivery.DTOs.Requests.CustomerDTO;
 import com.deliverytech.delivery.DTOs.Response.CustomerResponseDTO;
 import com.deliverytech.delivery.entity.Customer;
 import com.deliverytech.delivery.mapper.CustomerMapper;
-import com.deliverytech.delivery.repository.ICustomerRepository;
+import com.deliverytech.delivery.repository.Interfaces.ICustomerRepository;
 import com.deliverytech.delivery.service.Interfaces.ICustomerService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

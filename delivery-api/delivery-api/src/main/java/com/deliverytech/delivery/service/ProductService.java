@@ -9,7 +9,7 @@ import com.deliverytech.delivery.DTOs.Requests.ProductDTO;
 import com.deliverytech.delivery.DTOs.Response.ProductResponseDTO;
 import com.deliverytech.delivery.entity.Product;
 import com.deliverytech.delivery.mapper.ProductMapper;
-import com.deliverytech.delivery.repository.IProductRepository;
+import com.deliverytech.delivery.repository.Interfaces.IProductRepository;
 import com.deliverytech.delivery.service.Interfaces.IProductService;
 
 import jakarta.persistence.EntityNotFoundException;

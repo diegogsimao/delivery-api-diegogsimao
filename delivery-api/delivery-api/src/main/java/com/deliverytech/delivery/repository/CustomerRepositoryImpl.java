@@ -1,11 +1,11 @@
 package com.deliverytech.delivery.repository;
 
-import com.deliverytech.delivery.repository.Interfaces.IOrderRepositoryImpl;
+import com.deliverytech.delivery.repository.Interfaces.ICustomerRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-public class OrderRepositoryImpl implements IOrderRepositoryImpl {
+public class CustomerRepositoryImpl implements ICustomerRepositoryImpl {
 
     @PersistenceContext
     private EntityManager entityManager;

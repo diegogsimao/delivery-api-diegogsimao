@@ -1,4 +1,4 @@
-package com.deliverytech.delivery.repository;
+package com.deliverytech.delivery.repository.Interfaces;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
