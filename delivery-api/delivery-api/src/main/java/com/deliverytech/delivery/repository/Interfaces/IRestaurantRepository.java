@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.deliverytech.delivery.entity.Restaurant;
 
-public interface IRestaurantRepository extends JpaRepository<Restaurant, Long> {
+public interface IRestaurantRepository extends JpaRepository<Restaurant, Long>, IRestaurantRepositoryImpl {
 
     List<Restaurant> findAllByCategory(String category);
 
