@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import com.deliverytech.delivery.DTOs.Requests.OrderDTO;
 import com.deliverytech.delivery.DTOs.Response.OrderResponseDTO;
 import com.deliverytech.delivery.mapper.OrderMapper;
+import com.deliverytech.delivery.repository.OrderRepository;
 import com.deliverytech.delivery.entity.Order;
 import com.deliverytech.delivery.entity.enums.OrderStatus;
 import com.deliverytech.delivery.exceptions.EntityNotFoundException;
-import com.deliverytech.delivery.repository.Interfaces.IOrderRepository;
 import com.deliverytech.delivery.service.Interfaces.IOrderService;
 
 import jakarta.transaction.Transactional;
@@ -17,12 +17,12 @@ import jakarta.transaction.Transactional;
 @Service
 public class OrderServiceImpl implements IOrderService {
 
-    private IOrderRepository orderRepository;
+    private OrderRepository orderRepository;
     private OrderMapper orderMapper;
 
     @Autowired
     public OrderServiceImpl(
-            IOrderRepository orderRepository,
+            OrderRepository orderRepository,
             OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;

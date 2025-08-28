@@ -4,7 +4,7 @@ import com.deliverytech.delivery.DTOs.Requests.CustomerDTO;
 import com.deliverytech.delivery.DTOs.Response.CustomerResponseDTO;
 import com.deliverytech.delivery.entity.Customer;
 import com.deliverytech.delivery.mapper.CustomerMapper;
-import com.deliverytech.delivery.repository.Interfaces.ICustomerRepository;
+import com.deliverytech.delivery.repository.CustomerRepository;
 import com.deliverytech.delivery.service.Interfaces.ICustomerService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -21,12 +21,12 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class CustomerService implements ICustomerService {
 
-    private ICustomerRepository clienteRepository;
+    private CustomerRepository clienteRepository;
     private CustomerMapper customerMapper;
 
     @Autowired
     public CustomerService(
-            ICustomerRepository clienteRepository,
+            CustomerRepository clienteRepository,
             CustomerMapper customerMapper) {
         this.clienteRepository = clienteRepository;
     }

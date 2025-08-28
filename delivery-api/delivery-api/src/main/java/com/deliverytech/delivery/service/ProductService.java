@@ -9,7 +9,7 @@ import com.deliverytech.delivery.DTOs.Requests.ProductDTO;
 import com.deliverytech.delivery.DTOs.Response.ProductResponseDTO;
 import com.deliverytech.delivery.entity.Product;
 import com.deliverytech.delivery.mapper.ProductMapper;
-import com.deliverytech.delivery.repository.Interfaces.IProductRepository;
+import com.deliverytech.delivery.repository.ProductRepository;
 import com.deliverytech.delivery.service.Interfaces.IProductService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -18,12 +18,12 @@ import jakarta.transaction.Transactional;
 @Service
 public class ProductService implements IProductService {
 
-    private IProductRepository produtoRepository;
+    private ProductRepository produtoRepository;
     private ProductMapper productMapper;
 
     @Autowired
     public ProductService(
-            IProductRepository produtoRepository,
+            ProductRepository produtoRepository,
             ProductMapper productMapper) {
 
         this.produtoRepository = produtoRepository;

@@ -9,7 +9,7 @@ import com.deliverytech.delivery.DTOs.Response.RestaurantResponseDTO;
 import com.deliverytech.delivery.entity.Restaurant;
 import com.deliverytech.delivery.exceptions.EntityNotFoundException;
 import com.deliverytech.delivery.mapper.RestaurantMapper;
-import com.deliverytech.delivery.repository.Interfaces.IRestaurantRepository;
+import com.deliverytech.delivery.repository.RestaurantRepository;
 import com.deliverytech.delivery.service.Interfaces.IRestaurantService;
 
 import jakarta.transaction.Transactional;
@@ -17,11 +17,11 @@ import jakarta.transaction.Transactional;
 @Service
 public class RestaurantService implements IRestaurantService {
 
-    private IRestaurantRepository restaurantRepository;
+    private RestaurantRepository restaurantRepository;
     private RestaurantMapper restaurantMapper;
 
     @Autowired
-    public RestaurantService(IRestaurantRepository _restaurantRepository,
+    public RestaurantService(RestaurantRepository _restaurantRepository,
             RestaurantMapper restaurantMapper) {
         this.restaurantRepository = _restaurantRepository;
         this.restaurantMapper = restaurantMapper;

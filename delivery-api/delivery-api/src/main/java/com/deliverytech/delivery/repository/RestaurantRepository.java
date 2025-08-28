@@ -1,4 +1,4 @@
-package com.deliverytech.delivery.repository.Interfaces;
+package com.deliverytech.delivery.repository;
 
 import java.util.List;
 
@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.deliverytech.delivery.entity.Restaurant;
+import com.deliverytech.delivery.repository.Interfaces.IRestaurantRepositoryImpl;
 
-public interface IRestaurantRepository extends JpaRepository<Restaurant, Long>, IRestaurantRepositoryImpl {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long>, IRestaurantRepositoryImpl {
 
     List<Restaurant> findAllByCategory(String category);
 

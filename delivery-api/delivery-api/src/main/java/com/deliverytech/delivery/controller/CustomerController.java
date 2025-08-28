@@ -36,15 +36,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class CustomerController {
 
         private CustomerService clienteService;
-        private CustomerMapper customerMapper;
 
         @Autowired
         public CustomerController(
-                        CustomerService clienteService,
-                        CustomerMapper customerMapper) {
-
+                        CustomerService clienteService) {
                 this.clienteService = clienteService;
-                this.customerMapper = customerMapper;
         }
 
         @PostMapping
@@ -63,7 +59,7 @@ public class CustomerController {
         }
 
         @GetMapping("{id}")
-        @Operation(summary = "Pesquisa um cliente")
+        @Operation(summary = "Obtém um cliente")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),

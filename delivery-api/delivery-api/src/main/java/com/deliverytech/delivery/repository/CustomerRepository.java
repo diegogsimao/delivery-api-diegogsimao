@@ -1,4 +1,4 @@
-package com.deliverytech.delivery.repository.Interfaces;
+package com.deliverytech.delivery.repository;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.deliverytech.delivery.entity.Customer;
 
 @Repository
-public interface ICustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Customer findByEmail(String email);
 
