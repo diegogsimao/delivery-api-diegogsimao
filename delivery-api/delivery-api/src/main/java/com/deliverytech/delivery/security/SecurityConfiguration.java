@@ -21,7 +21,6 @@ public class SecurityConfiguration {
     @Autowired
     private SecurityFilter securityFilter;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
@@ -29,10 +28,15 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        // .requestMatchers(HttpMethod.POST,"/api/products").hasRole("ADMIN") - Exemplo
-                        // de autenticação por role
+                        .requestMatchers(
+                                "api/v3/api-docs/**",
+                                "api/swagger-ui/**",
+                                "api/swagger-ui.html")
+                        .permitAll()
+                        // .requestMatchers(HttpMethod.POST,"/api/products").hasRole("ADMIN") -
+                        // Exemplo
                         .anyRequest().authenticated())
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                // .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

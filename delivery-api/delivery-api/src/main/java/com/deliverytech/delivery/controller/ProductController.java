@@ -3,6 +3,7 @@ package com.deliverytech.delivery.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverytech.delivery.DTOs.Requests.ProductDTO;
 import com.deliverytech.delivery.DTOs.Response.ProductResponseDTO;
-import com.deliverytech.delivery.mapper.ProductMapper;
 import com.deliverytech.delivery.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +37,7 @@ public class ProductController {
         }
 
         @PostMapping
+        @PreAuthorize("hasRole('RESTAURANTE')")
         @Operation(summary = "Cria um novo Produto")
         @ApiResponses({
                         @ApiResponse(responseCode = "201", description = "Criado com sucesso"),
@@ -58,6 +59,7 @@ public class ProductController {
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                         @ApiResponse(responseCode = "404", description = "Produto não encontrado para restaurante pesquisado")
         })
+        @PreAuthorize("hasRole('RESTAURANTE')")
         public ResponseEntity<ProductResponseDTO> updateProduto(
                         @PathVariable Long id,
                         @RequestBody ProductDTO produtos) {
@@ -66,6 +68,7 @@ public class ProductController {
         }
 
         @PatchMapping("/{id}/disponibilidade")
+        @PreAuthorize("hasRole('RESTAURANTE')")
         @Operation(summary = "Atualiza a disponibilidade de um Produto existente")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Atualizado com sucesso"),
@@ -81,6 +84,7 @@ public class ProductController {
         }
 
         @DeleteMapping("{id}")
+        @PreAuthorize("hasRole('RESTAURANTE')")
         @Operation(summary = "Remove um Produto existente")
         @ApiResponses({
                         @ApiResponse(responseCode = "204", description = "Removido com sucesso"),
@@ -93,6 +97,7 @@ public class ProductController {
         }
 
         @GetMapping("/restaurantes/{restauranteId}/produtos")
+        @PreAuthorize("hasRole('CLIENTE') or hasRole('RESTAURANTE')")
         @Operation(summary = "Lista todos os Produtos de um Restaurante")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Lista de produtos retornada com sucesso"),

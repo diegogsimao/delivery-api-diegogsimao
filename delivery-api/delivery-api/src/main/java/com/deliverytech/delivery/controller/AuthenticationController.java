@@ -19,10 +19,12 @@ import com.deliverytech.delivery.entity.Users;
 import com.deliverytech.delivery.repository.UserRepository;
 import com.deliverytech.delivery.security.TokenService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("auth")
+@Tag(name = "Autenticação", description = "APIs para gerenciamento de autenticação")
 public class AuthenticationController {
 
     @Autowired
@@ -35,7 +37,11 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody @Valid LoginRequestDTO loginRequest) {
+    public ResponseEntity login(
+            @RequestBody 
+            @Valid 
+            LoginRequestDTO loginRequest) {
+
         var userNamePassorword = new UsernamePasswordAuthenticationToken(
                 loginRequest.email(), loginRequest.password());
 
@@ -47,7 +53,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO registerRequest) {
+    public ResponseEntity<Void> register(
+        @RequestBody 
+        @Valid 
+        RegisterDTO registerRequest) {
 
         if (this.userRepository.findByEmail(registerRequest.email()) != null)
             return ResponseEntity.ok().build();

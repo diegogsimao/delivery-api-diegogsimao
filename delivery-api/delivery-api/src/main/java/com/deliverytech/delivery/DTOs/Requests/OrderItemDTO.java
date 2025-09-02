@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public class ItemPedidoDTO {
+public class OrderItemDTO {
 
     @NotNull(message = "Produto ID é obrigatório")
     @Positive(message = "Produto ID deve ser positivo")

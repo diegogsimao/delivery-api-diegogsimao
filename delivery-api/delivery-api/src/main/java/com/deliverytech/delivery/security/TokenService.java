@@ -2,6 +2,7 @@ package com.deliverytech.delivery.security;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,11 @@ public class TokenService {
             String token = com.auth0.jwt.JWT.create()
                     .withIssuer("DeliveryTech")
                     .withSubject(user.getEmail())
-                    // .withExpiresAt(generationExpirationDate())
+                    .withExpiresAt(generationExpirationDate())
                     .sign(algorithm);
 
             return token;
+
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao gerar token JWT", exception);
         }
@@ -44,15 +46,18 @@ public class TokenService {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("DeliveryTech")
                     .build();
-                    
+
             DecodedJWT jwt = verifier.verify(token);
             return jwt.getSubject();
+
         } catch (JWTVerificationException exception) {
             return "";
         }
     }
 
-    private Instant generationExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(java.time.ZoneOffset.of("-03:00"));
+    private Date generationExpirationDate() {
+        Instant instant = LocalDateTime.now().plusHours(2).toInstant(java.time.ZoneOffset.of("-03:00"));
+        Date date = Date.from(instant);
+        return date;
     }
 }

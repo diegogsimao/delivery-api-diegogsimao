@@ -3,11 +3,13 @@ package com.deliverytech.delivery.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 
 import com.deliverytech.delivery.DTOs.Requests.ProductDTO;
 import com.deliverytech.delivery.DTOs.Response.ProductResponseDTO;
 import com.deliverytech.delivery.entity.Product;
+import com.deliverytech.delivery.entity.Users;
 import com.deliverytech.delivery.mapper.ProductMapper;
 import com.deliverytech.delivery.repository.ProductRepository;
 import com.deliverytech.delivery.service.Interfaces.IProductService;
@@ -98,4 +100,16 @@ public class ProductService implements IProductService {
         }
         produtoRepository.deleteById(id);
     }
+
+    // public boolean isOwner(long produtoId) {
+    // Users usuario = SecurityUtils.getCurrentUser();
+    // if (usuario == null) {
+    // return false;
+    // }
+    // Product produto = produtoRepository.findById(produtoId)
+    // .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado ou
+    // acesso negado"));
+
+    // return produto.getRestaurants().contains(usuario.getRestauranteId());
+    // }
 }

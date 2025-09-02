@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,9 @@ public class OrderDTO {
     @Pattern(regexp = "^(DINHEIRO|CARTAO_CREDITO|CARTAO_DEBITO|PIX)$", message = "Forma de pagamento deve ser: DINHEIRO, CARTAO_CREDITO, CARTAO_DEBITO ou PIX")
     private String formaPagamento;
 
-    // relacionamentos como apenas IDs
+    @NotNull(message = "O ID do cliente é obrigatório")
     private Long customerId;
+
+    @NotNull(message = "O ID do restaurante é obrigatório")
     private Long restaurantId;
 }

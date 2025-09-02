@@ -29,9 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-
 @RequestMapping("api/cliente")
-
 @Tag(name = "Clientes", description = "APIs para gerenciamento de clientes")
 public class CustomerController {
 
