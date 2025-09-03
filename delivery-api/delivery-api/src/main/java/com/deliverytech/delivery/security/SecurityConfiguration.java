@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                                 "api/swagger-ui/**",
                                 "api/swagger-ui.html")
                         .permitAll()
-                        // .requestMatchers(HttpMethod.POST,"/api/products").hasRole("ADMIN") -
+                        .requestMatchers(HttpMethod.POST, "/api/Customer").hasRole("ADMIN")
                         // Exemplo
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

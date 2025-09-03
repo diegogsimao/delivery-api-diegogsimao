@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.deliverytech.delivery.DTOs.Requests.CustomerDTO;
 import com.deliverytech.delivery.DTOs.Response.CustomerResponseDTO;
 import com.deliverytech.delivery.Utils.ApiResponseCustom;
-import com.deliverytech.delivery.mapper.CustomerMapper;
 import com.deliverytech.delivery.service.CustomerService;
 
 import org.springframework.data.domain.Pageable;
@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("api/cliente")
+@RequestMapping("api/clientes")
 @Tag(name = "Clientes", description = "APIs para gerenciamento de clientes")
 public class CustomerController {
 
@@ -43,6 +43,7 @@ public class CustomerController {
 
         @PostMapping
         @Operation(summary = "Cria um novo cliente")
+        @PreAuthorize("hasRole('ADMIN')")
         @ApiResponses({
                         @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
@@ -58,6 +59,7 @@ public class CustomerController {
 
         @GetMapping("{id}")
         @Operation(summary = "Obtém um cliente")
+        @PreAuthorize("hasRole('ADMIN','CUSTOMER')")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
@@ -71,8 +73,8 @@ public class CustomerController {
                                 null));
         }
 
-        @GetMapping("api/clientes")
         @Operation(summary = "Pesquisa todos os clientes")
+        @PreAuthorize("hasRole('ADMIN','CUSTOMER')")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
@@ -85,8 +87,9 @@ public class CustomerController {
                 return ResponseEntity.ok(entities);
         }
 
-        @GetMapping("api/clientes/email/{email}")
+        @GetMapping("email/{email}")
         @Operation(summary = "Pesquisa cliente por email")
+        @PreAuthorize("hasRole('ADMIN','CUSTOMER')")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
@@ -96,12 +99,12 @@ public class CustomerController {
                         @PathVariable String email) {
 
                 CustomerResponseDTO entity = clienteService.findByEmail(email);
-
                 return ResponseEntity.ok(entity);
         }
 
-        @PutMapping("api/clientes/{id}")
+        @PutMapping()
         @Operation(summary = "Atualiza os dados do  cliente")
+        @PreAuthorize("hasRole('ADMIN','CUSTOMER')")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),
@@ -114,8 +117,9 @@ public class CustomerController {
                 return ResponseEntity.ok(clienteService.update(clienteDTO));
         }
 
-        @PatchMapping("api/clientes/{id}")
+        @PatchMapping()
         @Operation(summary = "Atualiza os dados do  cliente")
+        @PreAuthorize("hasRole('ADMIN','CUSTOMER')")
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "Clientes encontrados com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Requisição inválida"),

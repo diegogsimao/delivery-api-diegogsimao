@@ -1,11 +1,15 @@
 package com.deliverytech.delivery.security;
 
+import java.util.UUID;
+
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import com.deliverytech.delivery.entity.Users;
 
+@Service
 public class SecurityUtils {
     public static Users getCurrentUser() {
         var authentication = SecurityContextHolder
@@ -19,7 +23,7 @@ public class SecurityUtils {
 
     }
 
-    public static Long getCurrentUserId() {
+    public static UUID getCurrentUserId() {
         return getCurrentUser().getId();
     }
 
@@ -29,7 +33,7 @@ public class SecurityUtils {
         if (auth != null && auth.getAuthorities() != null) {
             return auth.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
-                            .equals("ROLE_" + role));
+                            .equals(role));
         }
         return false;
     }

@@ -1,10 +1,10 @@
 package com.deliverytech.delivery.entity.enums;
 
 public enum UserRole {
-    ADMIN("Admin"),
-    CUSTOMER("Customer"),
-    DELIVERY("Delivery"),
-    RESTAURANT("Restaurant");
+    ADMIN("ADMIN"),
+    CUSTOMER("CUSTOMER"),
+    DELIVERY("DELIVERY"),
+    RESTAURANT("RESTAURANT");
 
     private String role;
 

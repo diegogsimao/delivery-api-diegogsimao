@@ -3,6 +3,7 @@ package com.deliverytech.delivery.entity;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,8 +31,8 @@ import lombok.NoArgsConstructor;
 public class Users implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String email;
     private String password;
@@ -41,7 +42,13 @@ public class Users implements UserDetails {
     private Date createdAt;
     private Date updatedAt;
 
-    public Users(String email, String password, Set<UserRole> roles, String name) {
+    public Users(
+        String email, 
+        String password, 
+        Set<UserRole> roles, 
+        String name) {
+
+        this.email = email;
         this.email = email;
         this.password = password;
         this.roles = roles;

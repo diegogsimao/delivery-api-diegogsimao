@@ -37,10 +37,8 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("login")
-    public ResponseEntity login(
-            @RequestBody 
-            @Valid 
-            LoginRequestDTO loginRequest) {
+    public ResponseEntity<LoginResponseDTO> login(
+            @RequestBody @Valid LoginRequestDTO loginRequest) {
 
         var userNamePassorword = new UsernamePasswordAuthenticationToken(
                 loginRequest.email(), loginRequest.password());
@@ -54,9 +52,7 @@ public class AuthenticationController {
 
     @PostMapping("register")
     public ResponseEntity<Void> register(
-        @RequestBody 
-        @Valid 
-        RegisterDTO registerRequest) {
+            @RequestBody @Valid RegisterDTO registerRequest) {
 
         if (this.userRepository.findByEmail(registerRequest.email()) != null)
             return ResponseEntity.ok().build();
