@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         // .requestMatchers(HttpMethod.POST,"/api/products").hasRole("ADMIN") -
                         // Exemplo
                         .anyRequest().authenticated())
-                // .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
